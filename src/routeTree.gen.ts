@@ -25,10 +25,12 @@ import { Route as OrdersIndexRouteImport } from './routes/orders.index'
 import { Route as AccountsIndexRouteImport } from './routes/accounts.index'
 import { Route as OrdersNewRouteImport } from './routes/orders.new'
 import { Route as OrdersOrderIdRouteImport } from './routes/orders.$orderId'
+import { Route as AccountsSupplierDueRouteImport } from './routes/accounts.supplier-due'
 import { Route as AccountsReceiveRouteImport } from './routes/accounts.receive'
 import { Route as AccountsPaymentRouteImport } from './routes/accounts.payment'
 import { Route as AccountsIncomeRouteImport } from './routes/accounts.income'
 import { Route as AccountsExpenseRouteImport } from './routes/accounts.expense'
+import { Route as AccountsCustomerDueRouteImport } from './routes/accounts.customer-due'
 
 const StockRoute = StockRouteImport.update({
   id: '/stock',
@@ -110,6 +112,11 @@ const OrdersOrderIdRoute = OrdersOrderIdRouteImport.update({
   path: '/$orderId',
   getParentRoute: () => OrdersRoute,
 } as any)
+const AccountsSupplierDueRoute = AccountsSupplierDueRouteImport.update({
+  id: '/supplier-due',
+  path: '/supplier-due',
+  getParentRoute: () => AccountsRoute,
+} as any)
 const AccountsReceiveRoute = AccountsReceiveRouteImport.update({
   id: '/receive',
   path: '/receive',
@@ -130,6 +137,11 @@ const AccountsExpenseRoute = AccountsExpenseRouteImport.update({
   path: '/expense',
   getParentRoute: () => AccountsRoute,
 } as any)
+const AccountsCustomerDueRoute = AccountsCustomerDueRouteImport.update({
+  id: '/customer-due',
+  path: '/customer-due',
+  getParentRoute: () => AccountsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -144,10 +156,12 @@ export interface FileRoutesByFullPath {
   '/sms': typeof SmsRoute
   '/soil': typeof SoilRoute
   '/stock': typeof StockRoute
+  '/accounts/customer-due': typeof AccountsCustomerDueRoute
   '/accounts/expense': typeof AccountsExpenseRoute
   '/accounts/income': typeof AccountsIncomeRoute
   '/accounts/payment': typeof AccountsPaymentRoute
   '/accounts/receive': typeof AccountsReceiveRoute
+  '/accounts/supplier-due': typeof AccountsSupplierDueRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
   '/accounts/': typeof AccountsIndexRoute
@@ -165,10 +179,12 @@ export interface FileRoutesByTo {
   '/sms': typeof SmsRoute
   '/soil': typeof SoilRoute
   '/stock': typeof StockRoute
+  '/accounts/customer-due': typeof AccountsCustomerDueRoute
   '/accounts/expense': typeof AccountsExpenseRoute
   '/accounts/income': typeof AccountsIncomeRoute
   '/accounts/payment': typeof AccountsPaymentRoute
   '/accounts/receive': typeof AccountsReceiveRoute
+  '/accounts/supplier-due': typeof AccountsSupplierDueRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
   '/accounts': typeof AccountsIndexRoute
@@ -188,10 +204,12 @@ export interface FileRoutesById {
   '/sms': typeof SmsRoute
   '/soil': typeof SoilRoute
   '/stock': typeof StockRoute
+  '/accounts/customer-due': typeof AccountsCustomerDueRoute
   '/accounts/expense': typeof AccountsExpenseRoute
   '/accounts/income': typeof AccountsIncomeRoute
   '/accounts/payment': typeof AccountsPaymentRoute
   '/accounts/receive': typeof AccountsReceiveRoute
+  '/accounts/supplier-due': typeof AccountsSupplierDueRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
   '/accounts/': typeof AccountsIndexRoute
@@ -212,10 +230,12 @@ export interface FileRouteTypes {
     | '/sms'
     | '/soil'
     | '/stock'
+    | '/accounts/customer-due'
     | '/accounts/expense'
     | '/accounts/income'
     | '/accounts/payment'
     | '/accounts/receive'
+    | '/accounts/supplier-due'
     | '/orders/$orderId'
     | '/orders/new'
     | '/accounts/'
@@ -233,10 +253,12 @@ export interface FileRouteTypes {
     | '/sms'
     | '/soil'
     | '/stock'
+    | '/accounts/customer-due'
     | '/accounts/expense'
     | '/accounts/income'
     | '/accounts/payment'
     | '/accounts/receive'
+    | '/accounts/supplier-due'
     | '/orders/$orderId'
     | '/orders/new'
     | '/accounts'
@@ -255,10 +277,12 @@ export interface FileRouteTypes {
     | '/sms'
     | '/soil'
     | '/stock'
+    | '/accounts/customer-due'
     | '/accounts/expense'
     | '/accounts/income'
     | '/accounts/payment'
     | '/accounts/receive'
+    | '/accounts/supplier-due'
     | '/orders/$orderId'
     | '/orders/new'
     | '/accounts/'
@@ -395,6 +419,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrdersOrderIdRouteImport
       parentRoute: typeof OrdersRoute
     }
+    '/accounts/supplier-due': {
+      id: '/accounts/supplier-due'
+      path: '/supplier-due'
+      fullPath: '/accounts/supplier-due'
+      preLoaderRoute: typeof AccountsSupplierDueRouteImport
+      parentRoute: typeof AccountsRoute
+    }
     '/accounts/receive': {
       id: '/accounts/receive'
       path: '/receive'
@@ -423,22 +454,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountsExpenseRouteImport
       parentRoute: typeof AccountsRoute
     }
+    '/accounts/customer-due': {
+      id: '/accounts/customer-due'
+      path: '/customer-due'
+      fullPath: '/accounts/customer-due'
+      preLoaderRoute: typeof AccountsCustomerDueRouteImport
+      parentRoute: typeof AccountsRoute
+    }
   }
 }
 
 interface AccountsRouteChildren {
+  AccountsCustomerDueRoute: typeof AccountsCustomerDueRoute
   AccountsExpenseRoute: typeof AccountsExpenseRoute
   AccountsIncomeRoute: typeof AccountsIncomeRoute
   AccountsPaymentRoute: typeof AccountsPaymentRoute
   AccountsReceiveRoute: typeof AccountsReceiveRoute
+  AccountsSupplierDueRoute: typeof AccountsSupplierDueRoute
   AccountsIndexRoute: typeof AccountsIndexRoute
 }
 
 const AccountsRouteChildren: AccountsRouteChildren = {
+  AccountsCustomerDueRoute: AccountsCustomerDueRoute,
   AccountsExpenseRoute: AccountsExpenseRoute,
   AccountsIncomeRoute: AccountsIncomeRoute,
   AccountsPaymentRoute: AccountsPaymentRoute,
   AccountsReceiveRoute: AccountsReceiveRoute,
+  AccountsSupplierDueRoute: AccountsSupplierDueRoute,
   AccountsIndexRoute: AccountsIndexRoute,
 }
 
