@@ -9,8 +9,80 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StockRouteImport } from './routes/stock'
+import { Route as SoilRouteImport } from './routes/soil'
+import { Route as SmsRouteImport } from './routes/sms'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SalaryRouteImport } from './routes/salary'
+import { Route as ReportsRouteImport } from './routes/reports'
+import { Route as ProductionRouteImport } from './routes/production'
+import { Route as OrdersRouteImport } from './routes/orders'
+import { Route as LaborRouteImport } from './routes/labor'
+import { Route as ExpensesRouteImport } from './routes/expenses'
+import { Route as DeliveryRouteImport } from './routes/delivery'
+import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as IndexRouteImport } from './routes/index'
 
+const StockRoute = StockRouteImport.update({
+  id: '/stock',
+  path: '/stock',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SoilRoute = SoilRouteImport.update({
+  id: '/soil',
+  path: '/soil',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SmsRoute = SmsRouteImport.update({
+  id: '/sms',
+  path: '/sms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SalaryRoute = SalaryRouteImport.update({
+  id: '/salary',
+  path: '/salary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductionRoute = ProductionRouteImport.update({
+  id: '/production',
+  path: '/production',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrdersRoute = OrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LaborRoute = LaborRouteImport.update({
+  id: '/labor',
+  path: '/labor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExpensesRoute = ExpensesRouteImport.update({
+  id: '/expenses',
+  path: '/expenses',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DeliveryRoute = DeliveryRouteImport.update({
+  id: '/delivery',
+  path: '/delivery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountsRoute = AccountsRouteImport.update({
+  id: '/accounts',
+  path: '/accounts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +91,200 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/accounts': typeof AccountsRoute
+  '/delivery': typeof DeliveryRoute
+  '/expenses': typeof ExpensesRoute
+  '/labor': typeof LaborRoute
+  '/orders': typeof OrdersRoute
+  '/production': typeof ProductionRoute
+  '/reports': typeof ReportsRoute
+  '/salary': typeof SalaryRoute
+  '/settings': typeof SettingsRoute
+  '/sms': typeof SmsRoute
+  '/soil': typeof SoilRoute
+  '/stock': typeof StockRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/accounts': typeof AccountsRoute
+  '/delivery': typeof DeliveryRoute
+  '/expenses': typeof ExpensesRoute
+  '/labor': typeof LaborRoute
+  '/orders': typeof OrdersRoute
+  '/production': typeof ProductionRoute
+  '/reports': typeof ReportsRoute
+  '/salary': typeof SalaryRoute
+  '/settings': typeof SettingsRoute
+  '/sms': typeof SmsRoute
+  '/soil': typeof SoilRoute
+  '/stock': typeof StockRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/accounts': typeof AccountsRoute
+  '/delivery': typeof DeliveryRoute
+  '/expenses': typeof ExpensesRoute
+  '/labor': typeof LaborRoute
+  '/orders': typeof OrdersRoute
+  '/production': typeof ProductionRoute
+  '/reports': typeof ReportsRoute
+  '/salary': typeof SalaryRoute
+  '/settings': typeof SettingsRoute
+  '/sms': typeof SmsRoute
+  '/soil': typeof SoilRoute
+  '/stock': typeof StockRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/accounts'
+    | '/delivery'
+    | '/expenses'
+    | '/labor'
+    | '/orders'
+    | '/production'
+    | '/reports'
+    | '/salary'
+    | '/settings'
+    | '/sms'
+    | '/soil'
+    | '/stock'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/accounts'
+    | '/delivery'
+    | '/expenses'
+    | '/labor'
+    | '/orders'
+    | '/production'
+    | '/reports'
+    | '/salary'
+    | '/settings'
+    | '/sms'
+    | '/soil'
+    | '/stock'
+  id:
+    | '__root__'
+    | '/'
+    | '/accounts'
+    | '/delivery'
+    | '/expenses'
+    | '/labor'
+    | '/orders'
+    | '/production'
+    | '/reports'
+    | '/salary'
+    | '/settings'
+    | '/sms'
+    | '/soil'
+    | '/stock'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountsRoute: typeof AccountsRoute
+  DeliveryRoute: typeof DeliveryRoute
+  ExpensesRoute: typeof ExpensesRoute
+  LaborRoute: typeof LaborRoute
+  OrdersRoute: typeof OrdersRoute
+  ProductionRoute: typeof ProductionRoute
+  ReportsRoute: typeof ReportsRoute
+  SalaryRoute: typeof SalaryRoute
+  SettingsRoute: typeof SettingsRoute
+  SmsRoute: typeof SmsRoute
+  SoilRoute: typeof SoilRoute
+  StockRoute: typeof StockRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/stock': {
+      id: '/stock'
+      path: '/stock'
+      fullPath: '/stock'
+      preLoaderRoute: typeof StockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/soil': {
+      id: '/soil'
+      path: '/soil'
+      fullPath: '/soil'
+      preLoaderRoute: typeof SoilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sms': {
+      id: '/sms'
+      path: '/sms'
+      fullPath: '/sms'
+      preLoaderRoute: typeof SmsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/salary': {
+      id: '/salary'
+      path: '/salary'
+      fullPath: '/salary'
+      preLoaderRoute: typeof SalaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/production': {
+      id: '/production'
+      path: '/production'
+      fullPath: '/production'
+      preLoaderRoute: typeof ProductionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/orders': {
+      id: '/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof OrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/labor': {
+      id: '/labor'
+      path: '/labor'
+      fullPath: '/labor'
+      preLoaderRoute: typeof LaborRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/expenses': {
+      id: '/expenses'
+      path: '/expenses'
+      fullPath: '/expenses'
+      preLoaderRoute: typeof ExpensesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/delivery': {
+      id: '/delivery'
+      path: '/delivery'
+      fullPath: '/delivery'
+      preLoaderRoute: typeof DeliveryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/accounts': {
+      id: '/accounts'
+      path: '/accounts'
+      fullPath: '/accounts'
+      preLoaderRoute: typeof AccountsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +297,18 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountsRoute: AccountsRoute,
+  DeliveryRoute: DeliveryRoute,
+  ExpensesRoute: ExpensesRoute,
+  LaborRoute: LaborRoute,
+  OrdersRoute: OrdersRoute,
+  ProductionRoute: ProductionRoute,
+  ReportsRoute: ReportsRoute,
+  SalaryRoute: SalaryRoute,
+  SettingsRoute: SettingsRoute,
+  SmsRoute: SmsRoute,
+  SoilRoute: SoilRoute,
+  StockRoute: StockRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
