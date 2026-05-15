@@ -3,6 +3,7 @@ import { TrendingDown, Flame, Mountain, Users, Wrench, Truck, Wallet } from "luc
 import { AppLayout } from "@/components/dashboard/AppLayout";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { MoneyEntryForm } from "@/components/dashboard/MoneyEntryForm";
+import { TxnList } from "@/components/dashboard/TxnList";
 
 export const Route = createFileRoute("/accounts/expense")({
   component: ExpensePage,
@@ -25,14 +26,19 @@ function ExpensePage() {
         title="খরচ যোগ করুন"
         subtitle="টাকা দিলাম — আজকের খরচ সংরক্ষণ করুন"
       />
-      <div className="max-w-3xl">
-        <MoneyEntryForm
-          tone="expense"
-          saveLabel="খরচ সংরক্ষণ করুন"
-          partyLabel="কাকে দিলেন"
-          partyPlaceholder="যেমন: কয়লা সাপ্লায়ার"
-          categories={cats}
-        />
+      <div className="grid grid-cols-1 xl:grid-cols-5 gap-4">
+        <div className="xl:col-span-2">
+          <MoneyEntryForm
+            tone="expense"
+            saveLabel="খরচ সংরক্ষণ করুন"
+            partyLabel="কাকে দিলেন"
+            partyPlaceholder="যেমন: কয়লা সাপ্লায়ার"
+            categories={cats}
+          />
+        </div>
+        <div className="xl:col-span-3">
+          <TxnList kind="expense" title="খরচ তালিকা" />
+        </div>
       </div>
     </AppLayout>
   );

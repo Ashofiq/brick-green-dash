@@ -21,6 +21,7 @@ import {
   Send,
   UserCheck,
   Building,
+  ListChecks,
 } from "lucide-react";
 import {
   Sidebar,
@@ -61,6 +62,7 @@ const items: Item[] = [
       { title: "অ্যাকাউন্ট তালিকা", url: "/accounts/list", icon: Users },
       { title: "আয় যোগ", url: "/accounts/income", icon: TrendingUp },
       { title: "খরচ যোগ", url: "/accounts/expense", icon: TrendingDown },
+      { title: "সব এন্ট্রি", url: "/accounts/transactions", icon: ListChecks },
       { title: "টাকা গ্রহণ", url: "/accounts/receive", icon: HandCoins },
       { title: "টাকা প্রদান", url: "/accounts/payment", icon: Send },
       { title: "কাস্টমার বাকি", url: "/accounts/customer-due", icon: UserCheck },
