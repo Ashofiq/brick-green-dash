@@ -42,7 +42,7 @@ function Dashboard() {
       <SidebarInset className="bg-background">
         <TopNavbar />
 
-        <main className="flex-1 p-4 md:p-6 pb-24 md:pb-6 space-y-6">
+        <div className="flex-1 p-4 md:p-6 pb-24 md:pb-6 space-y-6">
           {/* Header */}
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
@@ -83,7 +83,7 @@ function Dashboard() {
             </div>
             <WorkerList />
           </section>
-        </main>
+        </div>
 
         {/* Floating action button (mobile) */}
         <button
