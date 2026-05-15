@@ -24,6 +24,7 @@ import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OrdersIndexRouteImport } from './routes/orders.index'
 import { Route as AccountsIndexRouteImport } from './routes/accounts.index'
+import { Route as ReportsLedgerRouteImport } from './routes/reports.ledger'
 import { Route as OrdersNewRouteImport } from './routes/orders.new'
 import { Route as OrdersOrderIdRouteImport } from './routes/orders.$orderId'
 import { Route as AccountsTransactionsRouteImport } from './routes/accounts.transactions'
@@ -110,6 +111,11 @@ const AccountsIndexRoute = AccountsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AccountsRoute,
 } as any)
+const ReportsLedgerRoute = ReportsLedgerRouteImport.update({
+  id: '/ledger',
+  path: '/ledger',
+  getParentRoute: () => ReportsRoute,
+} as any)
 const OrdersNewRoute = OrdersNewRouteImport.update({
   id: '/orders/new',
   path: '/orders/new',
@@ -169,7 +175,7 @@ export interface FileRoutesByFullPath {
   '/labor': typeof LaborRoute
   '/login': typeof LoginRoute
   '/production': typeof ProductionRoute
-  '/reports': typeof ReportsRoute
+  '/reports': typeof ReportsRouteWithChildren
   '/salary': typeof SalaryRoute
   '/settings': typeof SettingsRoute
   '/sms': typeof SmsRoute
@@ -185,6 +191,7 @@ export interface FileRoutesByFullPath {
   '/accounts/transactions': typeof AccountsTransactionsRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
+  '/reports/ledger': typeof ReportsLedgerRoute
   '/accounts/': typeof AccountsIndexRoute
   '/orders/': typeof OrdersIndexRoute
 }
@@ -195,7 +202,7 @@ export interface FileRoutesByTo {
   '/labor': typeof LaborRoute
   '/login': typeof LoginRoute
   '/production': typeof ProductionRoute
-  '/reports': typeof ReportsRoute
+  '/reports': typeof ReportsRouteWithChildren
   '/salary': typeof SalaryRoute
   '/settings': typeof SettingsRoute
   '/sms': typeof SmsRoute
@@ -211,6 +218,7 @@ export interface FileRoutesByTo {
   '/accounts/transactions': typeof AccountsTransactionsRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
+  '/reports/ledger': typeof ReportsLedgerRoute
   '/accounts': typeof AccountsIndexRoute
   '/orders': typeof OrdersIndexRoute
 }
@@ -223,7 +231,7 @@ export interface FileRoutesById {
   '/labor': typeof LaborRoute
   '/login': typeof LoginRoute
   '/production': typeof ProductionRoute
-  '/reports': typeof ReportsRoute
+  '/reports': typeof ReportsRouteWithChildren
   '/salary': typeof SalaryRoute
   '/settings': typeof SettingsRoute
   '/sms': typeof SmsRoute
@@ -239,6 +247,7 @@ export interface FileRoutesById {
   '/accounts/transactions': typeof AccountsTransactionsRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
+  '/reports/ledger': typeof ReportsLedgerRoute
   '/accounts/': typeof AccountsIndexRoute
   '/orders/': typeof OrdersIndexRoute
 }
@@ -268,6 +277,7 @@ export interface FileRouteTypes {
     | '/accounts/transactions'
     | '/orders/$orderId'
     | '/orders/new'
+    | '/reports/ledger'
     | '/accounts/'
     | '/orders/'
   fileRoutesByTo: FileRoutesByTo
@@ -294,6 +304,7 @@ export interface FileRouteTypes {
     | '/accounts/transactions'
     | '/orders/$orderId'
     | '/orders/new'
+    | '/reports/ledger'
     | '/accounts'
     | '/orders'
   id:
@@ -321,6 +332,7 @@ export interface FileRouteTypes {
     | '/accounts/transactions'
     | '/orders/$orderId'
     | '/orders/new'
+    | '/reports/ledger'
     | '/accounts/'
     | '/orders/'
   fileRoutesById: FileRoutesById
@@ -333,7 +345,7 @@ export interface RootRouteChildren {
   LaborRoute: typeof LaborRoute
   LoginRoute: typeof LoginRoute
   ProductionRoute: typeof ProductionRoute
-  ReportsRoute: typeof ReportsRoute
+  ReportsRoute: typeof ReportsRouteWithChildren
   SalaryRoute: typeof SalaryRoute
   SettingsRoute: typeof SettingsRoute
   SmsRoute: typeof SmsRoute
@@ -451,6 +463,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountsIndexRouteImport
       parentRoute: typeof AccountsRoute
     }
+    '/reports/ledger': {
+      id: '/reports/ledger'
+      path: '/ledger'
+      fullPath: '/reports/ledger'
+      preLoaderRoute: typeof ReportsLedgerRouteImport
+      parentRoute: typeof ReportsRoute
+    }
     '/orders/new': {
       id: '/orders/new'
       path: '/orders/new'
@@ -552,6 +571,17 @@ const AccountsRouteWithChildren = AccountsRoute._addFileChildren(
   AccountsRouteChildren,
 )
 
+interface ReportsRouteChildren {
+  ReportsLedgerRoute: typeof ReportsLedgerRoute
+}
+
+const ReportsRouteChildren: ReportsRouteChildren = {
+  ReportsLedgerRoute: ReportsLedgerRoute,
+}
+
+const ReportsRouteWithChildren =
+  ReportsRoute._addFileChildren(ReportsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountsRoute: AccountsRouteWithChildren,
@@ -560,7 +590,7 @@ const rootRouteChildren: RootRouteChildren = {
   LaborRoute: LaborRoute,
   LoginRoute: LoginRoute,
   ProductionRoute: ProductionRoute,
-  ReportsRoute: ReportsRoute,
+  ReportsRoute: ReportsRouteWithChildren,
   SalaryRoute: SalaryRoute,
   SettingsRoute: SettingsRoute,
   SmsRoute: SmsRoute,
