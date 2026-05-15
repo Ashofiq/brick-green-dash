@@ -23,6 +23,7 @@ import { Route as DeliveryRouteImport } from './routes/delivery'
 import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OrdersNewRouteImport } from './routes/orders.new'
+import { Route as OrdersOrderIdRouteImport } from './routes/orders.$orderId'
 
 const StockRoute = StockRouteImport.update({
   id: '/stock',
@@ -94,6 +95,11 @@ const OrdersNewRoute = OrdersNewRouteImport.update({
   path: '/new',
   getParentRoute: () => OrdersRoute,
 } as any)
+const OrdersOrderIdRoute = OrdersOrderIdRouteImport.update({
+  id: '/$orderId',
+  path: '/$orderId',
+  getParentRoute: () => OrdersRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/sms': typeof SmsRoute
   '/soil': typeof SoilRoute
   '/stock': typeof StockRoute
+  '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
 }
 export interface FileRoutesByTo {
@@ -125,6 +132,7 @@ export interface FileRoutesByTo {
   '/sms': typeof SmsRoute
   '/soil': typeof SoilRoute
   '/stock': typeof StockRoute
+  '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
 }
 export interface FileRoutesById {
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/sms': typeof SmsRoute
   '/soil': typeof SoilRoute
   '/stock': typeof StockRoute
+  '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
 }
 export interface FileRouteTypes {
@@ -160,6 +169,7 @@ export interface FileRouteTypes {
     | '/sms'
     | '/soil'
     | '/stock'
+    | '/orders/$orderId'
     | '/orders/new'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/sms'
     | '/soil'
     | '/stock'
+    | '/orders/$orderId'
     | '/orders/new'
   id:
     | '__root__'
@@ -192,6 +203,7 @@ export interface FileRouteTypes {
     | '/sms'
     | '/soil'
     | '/stock'
+    | '/orders/$orderId'
     | '/orders/new'
   fileRoutesById: FileRoutesById
 }
@@ -311,14 +323,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrdersNewRouteImport
       parentRoute: typeof OrdersRoute
     }
+    '/orders/$orderId': {
+      id: '/orders/$orderId'
+      path: '/$orderId'
+      fullPath: '/orders/$orderId'
+      preLoaderRoute: typeof OrdersOrderIdRouteImport
+      parentRoute: typeof OrdersRoute
+    }
   }
 }
 
 interface OrdersRouteChildren {
+  OrdersOrderIdRoute: typeof OrdersOrderIdRoute
   OrdersNewRoute: typeof OrdersNewRoute
 }
 
 const OrdersRouteChildren: OrdersRouteChildren = {
+  OrdersOrderIdRoute: OrdersOrderIdRoute,
   OrdersNewRoute: OrdersNewRoute,
 }
 
