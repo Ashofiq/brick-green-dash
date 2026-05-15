@@ -28,6 +28,7 @@ import { Route as OrdersOrderIdRouteImport } from './routes/orders.$orderId'
 import { Route as AccountsSupplierDueRouteImport } from './routes/accounts.supplier-due'
 import { Route as AccountsReceiveRouteImport } from './routes/accounts.receive'
 import { Route as AccountsPaymentRouteImport } from './routes/accounts.payment'
+import { Route as AccountsListRouteImport } from './routes/accounts.list'
 import { Route as AccountsIncomeRouteImport } from './routes/accounts.income'
 import { Route as AccountsExpenseRouteImport } from './routes/accounts.expense'
 import { Route as AccountsCustomerDueRouteImport } from './routes/accounts.customer-due'
@@ -127,6 +128,11 @@ const AccountsPaymentRoute = AccountsPaymentRouteImport.update({
   path: '/payment',
   getParentRoute: () => AccountsRoute,
 } as any)
+const AccountsListRoute = AccountsListRouteImport.update({
+  id: '/list',
+  path: '/list',
+  getParentRoute: () => AccountsRoute,
+} as any)
 const AccountsIncomeRoute = AccountsIncomeRouteImport.update({
   id: '/income',
   path: '/income',
@@ -159,6 +165,7 @@ export interface FileRoutesByFullPath {
   '/accounts/customer-due': typeof AccountsCustomerDueRoute
   '/accounts/expense': typeof AccountsExpenseRoute
   '/accounts/income': typeof AccountsIncomeRoute
+  '/accounts/list': typeof AccountsListRoute
   '/accounts/payment': typeof AccountsPaymentRoute
   '/accounts/receive': typeof AccountsReceiveRoute
   '/accounts/supplier-due': typeof AccountsSupplierDueRoute
@@ -182,6 +189,7 @@ export interface FileRoutesByTo {
   '/accounts/customer-due': typeof AccountsCustomerDueRoute
   '/accounts/expense': typeof AccountsExpenseRoute
   '/accounts/income': typeof AccountsIncomeRoute
+  '/accounts/list': typeof AccountsListRoute
   '/accounts/payment': typeof AccountsPaymentRoute
   '/accounts/receive': typeof AccountsReceiveRoute
   '/accounts/supplier-due': typeof AccountsSupplierDueRoute
@@ -207,6 +215,7 @@ export interface FileRoutesById {
   '/accounts/customer-due': typeof AccountsCustomerDueRoute
   '/accounts/expense': typeof AccountsExpenseRoute
   '/accounts/income': typeof AccountsIncomeRoute
+  '/accounts/list': typeof AccountsListRoute
   '/accounts/payment': typeof AccountsPaymentRoute
   '/accounts/receive': typeof AccountsReceiveRoute
   '/accounts/supplier-due': typeof AccountsSupplierDueRoute
@@ -233,6 +242,7 @@ export interface FileRouteTypes {
     | '/accounts/customer-due'
     | '/accounts/expense'
     | '/accounts/income'
+    | '/accounts/list'
     | '/accounts/payment'
     | '/accounts/receive'
     | '/accounts/supplier-due'
@@ -256,6 +266,7 @@ export interface FileRouteTypes {
     | '/accounts/customer-due'
     | '/accounts/expense'
     | '/accounts/income'
+    | '/accounts/list'
     | '/accounts/payment'
     | '/accounts/receive'
     | '/accounts/supplier-due'
@@ -280,6 +291,7 @@ export interface FileRouteTypes {
     | '/accounts/customer-due'
     | '/accounts/expense'
     | '/accounts/income'
+    | '/accounts/list'
     | '/accounts/payment'
     | '/accounts/receive'
     | '/accounts/supplier-due'
@@ -442,6 +454,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountsPaymentRouteImport
       parentRoute: typeof AccountsRoute
     }
+    '/accounts/list': {
+      id: '/accounts/list'
+      path: '/list'
+      fullPath: '/accounts/list'
+      preLoaderRoute: typeof AccountsListRouteImport
+      parentRoute: typeof AccountsRoute
+    }
     '/accounts/income': {
       id: '/accounts/income'
       path: '/income'
@@ -470,6 +489,7 @@ interface AccountsRouteChildren {
   AccountsCustomerDueRoute: typeof AccountsCustomerDueRoute
   AccountsExpenseRoute: typeof AccountsExpenseRoute
   AccountsIncomeRoute: typeof AccountsIncomeRoute
+  AccountsListRoute: typeof AccountsListRoute
   AccountsPaymentRoute: typeof AccountsPaymentRoute
   AccountsReceiveRoute: typeof AccountsReceiveRoute
   AccountsSupplierDueRoute: typeof AccountsSupplierDueRoute
@@ -480,6 +500,7 @@ const AccountsRouteChildren: AccountsRouteChildren = {
   AccountsCustomerDueRoute: AccountsCustomerDueRoute,
   AccountsExpenseRoute: AccountsExpenseRoute,
   AccountsIncomeRoute: AccountsIncomeRoute,
+  AccountsListRoute: AccountsListRoute,
   AccountsPaymentRoute: AccountsPaymentRoute,
   AccountsReceiveRoute: AccountsReceiveRoute,
   AccountsSupplierDueRoute: AccountsSupplierDueRoute,
