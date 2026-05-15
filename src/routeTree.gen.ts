@@ -22,6 +22,7 @@ import { Route as ExpensesRouteImport } from './routes/expenses'
 import { Route as DeliveryRouteImport } from './routes/delivery'
 import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OrdersNewRouteImport } from './routes/orders.new'
 
 const StockRoute = StockRouteImport.update({
   id: '/stock',
@@ -88,6 +89,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrdersNewRoute = OrdersNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => OrdersRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -95,7 +101,7 @@ export interface FileRoutesByFullPath {
   '/delivery': typeof DeliveryRoute
   '/expenses': typeof ExpensesRoute
   '/labor': typeof LaborRoute
-  '/orders': typeof OrdersRoute
+  '/orders': typeof OrdersRouteWithChildren
   '/production': typeof ProductionRoute
   '/reports': typeof ReportsRoute
   '/salary': typeof SalaryRoute
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/sms': typeof SmsRoute
   '/soil': typeof SoilRoute
   '/stock': typeof StockRoute
+  '/orders/new': typeof OrdersNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -110,7 +117,7 @@ export interface FileRoutesByTo {
   '/delivery': typeof DeliveryRoute
   '/expenses': typeof ExpensesRoute
   '/labor': typeof LaborRoute
-  '/orders': typeof OrdersRoute
+  '/orders': typeof OrdersRouteWithChildren
   '/production': typeof ProductionRoute
   '/reports': typeof ReportsRoute
   '/salary': typeof SalaryRoute
@@ -118,6 +125,7 @@ export interface FileRoutesByTo {
   '/sms': typeof SmsRoute
   '/soil': typeof SoilRoute
   '/stock': typeof StockRoute
+  '/orders/new': typeof OrdersNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -126,7 +134,7 @@ export interface FileRoutesById {
   '/delivery': typeof DeliveryRoute
   '/expenses': typeof ExpensesRoute
   '/labor': typeof LaborRoute
-  '/orders': typeof OrdersRoute
+  '/orders': typeof OrdersRouteWithChildren
   '/production': typeof ProductionRoute
   '/reports': typeof ReportsRoute
   '/salary': typeof SalaryRoute
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/sms': typeof SmsRoute
   '/soil': typeof SoilRoute
   '/stock': typeof StockRoute
+  '/orders/new': typeof OrdersNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/sms'
     | '/soil'
     | '/stock'
+    | '/orders/new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -166,6 +176,7 @@ export interface FileRouteTypes {
     | '/sms'
     | '/soil'
     | '/stock'
+    | '/orders/new'
   id:
     | '__root__'
     | '/'
@@ -181,6 +192,7 @@ export interface FileRouteTypes {
     | '/sms'
     | '/soil'
     | '/stock'
+    | '/orders/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -189,7 +201,7 @@ export interface RootRouteChildren {
   DeliveryRoute: typeof DeliveryRoute
   ExpensesRoute: typeof ExpensesRoute
   LaborRoute: typeof LaborRoute
-  OrdersRoute: typeof OrdersRoute
+  OrdersRoute: typeof OrdersRouteWithChildren
   ProductionRoute: typeof ProductionRoute
   ReportsRoute: typeof ReportsRoute
   SalaryRoute: typeof SalaryRoute
@@ -292,8 +304,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/orders/new': {
+      id: '/orders/new'
+      path: '/new'
+      fullPath: '/orders/new'
+      preLoaderRoute: typeof OrdersNewRouteImport
+      parentRoute: typeof OrdersRoute
+    }
   }
 }
+
+interface OrdersRouteChildren {
+  OrdersNewRoute: typeof OrdersNewRoute
+}
+
+const OrdersRouteChildren: OrdersRouteChildren = {
+  OrdersNewRoute: OrdersNewRoute,
+}
+
+const OrdersRouteWithChildren =
+  OrdersRoute._addFileChildren(OrdersRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -301,7 +331,7 @@ const rootRouteChildren: RootRouteChildren = {
   DeliveryRoute: DeliveryRoute,
   ExpensesRoute: ExpensesRoute,
   LaborRoute: LaborRoute,
-  OrdersRoute: OrdersRoute,
+  OrdersRoute: OrdersRouteWithChildren,
   ProductionRoute: ProductionRoute,
   ReportsRoute: ReportsRoute,
   SalaryRoute: SalaryRoute,
@@ -313,3 +343,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
