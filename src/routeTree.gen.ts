@@ -16,6 +16,7 @@ import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SalaryRouteImport } from './routes/salary'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as ProductionRouteImport } from './routes/production'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as LaborRouteImport } from './routes/labor'
 import { Route as ExpensesRouteImport } from './routes/expenses'
 import { Route as DeliveryRouteImport } from './routes/delivery'
@@ -25,6 +26,7 @@ import { Route as OrdersIndexRouteImport } from './routes/orders.index'
 import { Route as AccountsIndexRouteImport } from './routes/accounts.index'
 import { Route as OrdersNewRouteImport } from './routes/orders.new'
 import { Route as OrdersOrderIdRouteImport } from './routes/orders.$orderId'
+import { Route as AccountsTransactionsRouteImport } from './routes/accounts.transactions'
 import { Route as AccountsSupplierDueRouteImport } from './routes/accounts.supplier-due'
 import { Route as AccountsReceiveRouteImport } from './routes/accounts.receive'
 import { Route as AccountsPaymentRouteImport } from './routes/accounts.payment'
@@ -66,6 +68,11 @@ const ReportsRoute = ReportsRouteImport.update({
 const ProductionRoute = ProductionRouteImport.update({
   id: '/production',
   path: '/production',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LaborRoute = LaborRouteImport.update({
@@ -113,6 +120,11 @@ const OrdersOrderIdRoute = OrdersOrderIdRouteImport.update({
   path: '/orders/$orderId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountsTransactionsRoute = AccountsTransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => AccountsRoute,
+} as any)
 const AccountsSupplierDueRoute = AccountsSupplierDueRouteImport.update({
   id: '/supplier-due',
   path: '/supplier-due',
@@ -155,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/delivery': typeof DeliveryRoute
   '/expenses': typeof ExpensesRoute
   '/labor': typeof LaborRoute
+  '/login': typeof LoginRoute
   '/production': typeof ProductionRoute
   '/reports': typeof ReportsRoute
   '/salary': typeof SalaryRoute
@@ -169,6 +182,7 @@ export interface FileRoutesByFullPath {
   '/accounts/payment': typeof AccountsPaymentRoute
   '/accounts/receive': typeof AccountsReceiveRoute
   '/accounts/supplier-due': typeof AccountsSupplierDueRoute
+  '/accounts/transactions': typeof AccountsTransactionsRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
   '/accounts/': typeof AccountsIndexRoute
@@ -179,6 +193,7 @@ export interface FileRoutesByTo {
   '/delivery': typeof DeliveryRoute
   '/expenses': typeof ExpensesRoute
   '/labor': typeof LaborRoute
+  '/login': typeof LoginRoute
   '/production': typeof ProductionRoute
   '/reports': typeof ReportsRoute
   '/salary': typeof SalaryRoute
@@ -193,6 +208,7 @@ export interface FileRoutesByTo {
   '/accounts/payment': typeof AccountsPaymentRoute
   '/accounts/receive': typeof AccountsReceiveRoute
   '/accounts/supplier-due': typeof AccountsSupplierDueRoute
+  '/accounts/transactions': typeof AccountsTransactionsRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
   '/accounts': typeof AccountsIndexRoute
@@ -205,6 +221,7 @@ export interface FileRoutesById {
   '/delivery': typeof DeliveryRoute
   '/expenses': typeof ExpensesRoute
   '/labor': typeof LaborRoute
+  '/login': typeof LoginRoute
   '/production': typeof ProductionRoute
   '/reports': typeof ReportsRoute
   '/salary': typeof SalaryRoute
@@ -219,6 +236,7 @@ export interface FileRoutesById {
   '/accounts/payment': typeof AccountsPaymentRoute
   '/accounts/receive': typeof AccountsReceiveRoute
   '/accounts/supplier-due': typeof AccountsSupplierDueRoute
+  '/accounts/transactions': typeof AccountsTransactionsRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
   '/accounts/': typeof AccountsIndexRoute
@@ -232,6 +250,7 @@ export interface FileRouteTypes {
     | '/delivery'
     | '/expenses'
     | '/labor'
+    | '/login'
     | '/production'
     | '/reports'
     | '/salary'
@@ -246,6 +265,7 @@ export interface FileRouteTypes {
     | '/accounts/payment'
     | '/accounts/receive'
     | '/accounts/supplier-due'
+    | '/accounts/transactions'
     | '/orders/$orderId'
     | '/orders/new'
     | '/accounts/'
@@ -256,6 +276,7 @@ export interface FileRouteTypes {
     | '/delivery'
     | '/expenses'
     | '/labor'
+    | '/login'
     | '/production'
     | '/reports'
     | '/salary'
@@ -270,6 +291,7 @@ export interface FileRouteTypes {
     | '/accounts/payment'
     | '/accounts/receive'
     | '/accounts/supplier-due'
+    | '/accounts/transactions'
     | '/orders/$orderId'
     | '/orders/new'
     | '/accounts'
@@ -281,6 +303,7 @@ export interface FileRouteTypes {
     | '/delivery'
     | '/expenses'
     | '/labor'
+    | '/login'
     | '/production'
     | '/reports'
     | '/salary'
@@ -295,6 +318,7 @@ export interface FileRouteTypes {
     | '/accounts/payment'
     | '/accounts/receive'
     | '/accounts/supplier-due'
+    | '/accounts/transactions'
     | '/orders/$orderId'
     | '/orders/new'
     | '/accounts/'
@@ -307,6 +331,7 @@ export interface RootRouteChildren {
   DeliveryRoute: typeof DeliveryRoute
   ExpensesRoute: typeof ExpensesRoute
   LaborRoute: typeof LaborRoute
+  LoginRoute: typeof LoginRoute
   ProductionRoute: typeof ProductionRoute
   ReportsRoute: typeof ReportsRoute
   SalaryRoute: typeof SalaryRoute
@@ -368,6 +393,13 @@ declare module '@tanstack/react-router' {
       path: '/production'
       fullPath: '/production'
       preLoaderRoute: typeof ProductionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/labor': {
@@ -433,6 +465,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrdersOrderIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/accounts/transactions': {
+      id: '/accounts/transactions'
+      path: '/transactions'
+      fullPath: '/accounts/transactions'
+      preLoaderRoute: typeof AccountsTransactionsRouteImport
+      parentRoute: typeof AccountsRoute
+    }
     '/accounts/supplier-due': {
       id: '/accounts/supplier-due'
       path: '/supplier-due'
@@ -493,6 +532,7 @@ interface AccountsRouteChildren {
   AccountsPaymentRoute: typeof AccountsPaymentRoute
   AccountsReceiveRoute: typeof AccountsReceiveRoute
   AccountsSupplierDueRoute: typeof AccountsSupplierDueRoute
+  AccountsTransactionsRoute: typeof AccountsTransactionsRoute
   AccountsIndexRoute: typeof AccountsIndexRoute
 }
 
@@ -504,6 +544,7 @@ const AccountsRouteChildren: AccountsRouteChildren = {
   AccountsPaymentRoute: AccountsPaymentRoute,
   AccountsReceiveRoute: AccountsReceiveRoute,
   AccountsSupplierDueRoute: AccountsSupplierDueRoute,
+  AccountsTransactionsRoute: AccountsTransactionsRoute,
   AccountsIndexRoute: AccountsIndexRoute,
 }
 
@@ -517,6 +558,7 @@ const rootRouteChildren: RootRouteChildren = {
   DeliveryRoute: DeliveryRoute,
   ExpensesRoute: ExpensesRoute,
   LaborRoute: LaborRoute,
+  LoginRoute: LoginRoute,
   ProductionRoute: ProductionRoute,
   ReportsRoute: ReportsRoute,
   SalaryRoute: SalaryRoute,
