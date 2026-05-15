@@ -3,6 +3,7 @@ import { TrendingUp, ShoppingCart, Banknote, Truck, Receipt } from "lucide-react
 import { AppLayout } from "@/components/dashboard/AppLayout";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { MoneyEntryForm } from "@/components/dashboard/MoneyEntryForm";
+import { TxnList } from "@/components/dashboard/TxnList";
 
 export const Route = createFileRoute("/accounts/income")({
   component: IncomePage,
@@ -23,14 +24,19 @@ function IncomePage() {
         title="আয় যোগ করুন"
         subtitle="টাকা পেলাম — আজকের আয় সংরক্ষণ করুন"
       />
-      <div className="max-w-3xl">
-        <MoneyEntryForm
-          tone="income"
-          saveLabel="আয় সংরক্ষণ করুন"
-          partyLabel="কার কাছ থেকে"
-          partyPlaceholder="যেমন: করিম ট্রেডার্স"
-          categories={cats}
-        />
+      <div className="grid grid-cols-1 xl:grid-cols-5 gap-4">
+        <div className="xl:col-span-2">
+          <MoneyEntryForm
+            tone="income"
+            saveLabel="আয় সংরক্ষণ করুন"
+            partyLabel="কার কাছ থেকে"
+            partyPlaceholder="যেমন: করিম ট্রেডার্স"
+            categories={cats}
+          />
+        </div>
+        <div className="xl:col-span-3">
+          <TxnList kind="income" title="আয় তালিকা" />
+        </div>
       </div>
     </AppLayout>
   );
