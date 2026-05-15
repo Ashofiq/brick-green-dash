@@ -14,7 +14,6 @@ import { Route as SoilRouteImport } from './routes/soil'
 import { Route as SmsRouteImport } from './routes/sms'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SalaryRouteImport } from './routes/salary'
-import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as ProductionRouteImport } from './routes/production'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LaborRouteImport } from './routes/labor'
@@ -22,6 +21,7 @@ import { Route as ExpensesRouteImport } from './routes/expenses'
 import { Route as DeliveryRouteImport } from './routes/delivery'
 import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ReportsIndexRouteImport } from './routes/reports.index'
 import { Route as OrdersIndexRouteImport } from './routes/orders.index'
 import { Route as AccountsIndexRouteImport } from './routes/accounts.index'
 import { Route as ReportsLedgerRouteImport } from './routes/reports.ledger'
@@ -61,11 +61,6 @@ const SalaryRoute = SalaryRouteImport.update({
   path: '/salary',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ReportsRoute = ReportsRouteImport.update({
-  id: '/reports',
-  path: '/reports',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ProductionRoute = ProductionRouteImport.update({
   id: '/production',
   path: '/production',
@@ -99,6 +94,11 @@ const AccountsRoute = AccountsRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsIndexRoute = ReportsIndexRouteImport.update({
+  id: '/reports/',
+  path: '/reports/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrdersIndexRoute = OrdersIndexRouteImport.update({
@@ -175,7 +175,6 @@ export interface FileRoutesByFullPath {
   '/labor': typeof LaborRoute
   '/login': typeof LoginRoute
   '/production': typeof ProductionRoute
-  '/reports': typeof ReportsRouteWithChildren
   '/salary': typeof SalaryRoute
   '/settings': typeof SettingsRoute
   '/sms': typeof SmsRoute
@@ -194,6 +193,7 @@ export interface FileRoutesByFullPath {
   '/reports/ledger': typeof ReportsLedgerRoute
   '/accounts/': typeof AccountsIndexRoute
   '/orders/': typeof OrdersIndexRoute
+  '/reports/': typeof ReportsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -202,7 +202,6 @@ export interface FileRoutesByTo {
   '/labor': typeof LaborRoute
   '/login': typeof LoginRoute
   '/production': typeof ProductionRoute
-  '/reports': typeof ReportsRouteWithChildren
   '/salary': typeof SalaryRoute
   '/settings': typeof SettingsRoute
   '/sms': typeof SmsRoute
@@ -221,6 +220,7 @@ export interface FileRoutesByTo {
   '/reports/ledger': typeof ReportsLedgerRoute
   '/accounts': typeof AccountsIndexRoute
   '/orders': typeof OrdersIndexRoute
+  '/reports': typeof ReportsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -231,7 +231,6 @@ export interface FileRoutesById {
   '/labor': typeof LaborRoute
   '/login': typeof LoginRoute
   '/production': typeof ProductionRoute
-  '/reports': typeof ReportsRouteWithChildren
   '/salary': typeof SalaryRoute
   '/settings': typeof SettingsRoute
   '/sms': typeof SmsRoute
@@ -250,6 +249,7 @@ export interface FileRoutesById {
   '/reports/ledger': typeof ReportsLedgerRoute
   '/accounts/': typeof AccountsIndexRoute
   '/orders/': typeof OrdersIndexRoute
+  '/reports/': typeof ReportsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -261,7 +261,6 @@ export interface FileRouteTypes {
     | '/labor'
     | '/login'
     | '/production'
-    | '/reports'
     | '/salary'
     | '/settings'
     | '/sms'
@@ -280,6 +279,7 @@ export interface FileRouteTypes {
     | '/reports/ledger'
     | '/accounts/'
     | '/orders/'
+    | '/reports/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -288,7 +288,6 @@ export interface FileRouteTypes {
     | '/labor'
     | '/login'
     | '/production'
-    | '/reports'
     | '/salary'
     | '/settings'
     | '/sms'
@@ -307,6 +306,7 @@ export interface FileRouteTypes {
     | '/reports/ledger'
     | '/accounts'
     | '/orders'
+    | '/reports'
   id:
     | '__root__'
     | '/'
@@ -316,7 +316,6 @@ export interface FileRouteTypes {
     | '/labor'
     | '/login'
     | '/production'
-    | '/reports'
     | '/salary'
     | '/settings'
     | '/sms'
@@ -335,6 +334,7 @@ export interface FileRouteTypes {
     | '/reports/ledger'
     | '/accounts/'
     | '/orders/'
+    | '/reports/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -345,7 +345,6 @@ export interface RootRouteChildren {
   LaborRoute: typeof LaborRoute
   LoginRoute: typeof LoginRoute
   ProductionRoute: typeof ProductionRoute
-  ReportsRoute: typeof ReportsRouteWithChildren
   SalaryRoute: typeof SalaryRoute
   SettingsRoute: typeof SettingsRoute
   SmsRoute: typeof SmsRoute
@@ -354,6 +353,7 @@ export interface RootRouteChildren {
   OrdersOrderIdRoute: typeof OrdersOrderIdRoute
   OrdersNewRoute: typeof OrdersNewRoute
   OrdersIndexRoute: typeof OrdersIndexRoute
+  ReportsIndexRoute: typeof ReportsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -391,13 +391,6 @@ declare module '@tanstack/react-router' {
       path: '/salary'
       fullPath: '/salary'
       preLoaderRoute: typeof SalaryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reports': {
-      id: '/reports'
-      path: '/reports'
-      fullPath: '/reports'
-      preLoaderRoute: typeof ReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/production': {
@@ -447,6 +440,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports/': {
+      id: '/reports/'
+      path: '/reports'
+      fullPath: '/reports/'
+      preLoaderRoute: typeof ReportsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/orders/': {
@@ -571,17 +571,6 @@ const AccountsRouteWithChildren = AccountsRoute._addFileChildren(
   AccountsRouteChildren,
 )
 
-interface ReportsRouteChildren {
-  ReportsLedgerRoute: typeof ReportsLedgerRoute
-}
-
-const ReportsRouteChildren: ReportsRouteChildren = {
-  ReportsLedgerRoute: ReportsLedgerRoute,
-}
-
-const ReportsRouteWithChildren =
-  ReportsRoute._addFileChildren(ReportsRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountsRoute: AccountsRouteWithChildren,
@@ -590,7 +579,6 @@ const rootRouteChildren: RootRouteChildren = {
   LaborRoute: LaborRoute,
   LoginRoute: LoginRoute,
   ProductionRoute: ProductionRoute,
-  ReportsRoute: ReportsRouteWithChildren,
   SalaryRoute: SalaryRoute,
   SettingsRoute: SettingsRoute,
   SmsRoute: SmsRoute,
@@ -599,7 +587,18 @@ const rootRouteChildren: RootRouteChildren = {
   OrdersOrderIdRoute: OrdersOrderIdRoute,
   OrdersNewRoute: OrdersNewRoute,
   OrdersIndexRoute: OrdersIndexRoute,
+  ReportsIndexRoute: ReportsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
