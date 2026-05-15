@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import {
   Factory,
   Layers,
@@ -8,17 +9,13 @@ import {
   Users,
   Flame,
   Mountain,
-  Plus,
 } from "lucide-react";
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/dashboard/AppSidebar";
-import { TopNavbar } from "@/components/dashboard/TopNavbar";
+import { AppLayout } from "@/components/dashboard/AppLayout";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { ProductionChart } from "@/components/dashboard/ProductionChart";
 import { DeliveryTable } from "@/components/dashboard/DeliveryTable";
 import { ExpenseForm } from "@/components/dashboard/ExpenseForm";
 import { WorkerList } from "@/components/dashboard/WorkerList";
-import { MobileNav } from "@/components/dashboard/MobileNav";
 
 export const Route = createFileRoute("/")({
   component: Dashboard,
@@ -37,64 +34,37 @@ const stats = [
 
 function Dashboard() {
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset className="bg-background">
-        <TopNavbar />
-
-        <div className="flex-1 p-4 md:p-6 pb-24 md:pb-6 space-y-6">
-          {/* Header */}
-          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold tracking-tight">স্বাগতম, রহিম ভাই 👋</h1>
-              <p className="mt-1 text-sm text-muted-foreground">
-                আজকের ভাটার সংক্ষিপ্ত পরিসংখ্যান এক নজরে দেখুন।
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <button className="h-11 rounded-xl border-2 border-border-strong bg-card px-4 text-sm font-semibold hover:bg-secondary transition-colors">
-                রিপোর্ট ডাউনলোড
-              </button>
-              <button className="h-11 rounded-xl border-2 border-success bg-primary px-5 text-sm font-bold text-primary-foreground shadow-card hover:bg-success transition-colors">
-                + নতুন উৎপাদন
-              </button>
-            </div>
-          </div>
-
-          {/* Stat grid */}
-          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {stats.map((s) => (
-              <StatCard key={s.title} {...s} />
-            ))}
-          </section>
-
-          {/* Chart + Expense */}
-          <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="lg:col-span-2">
-              <ProductionChart />
-            </div>
-            <ExpenseForm />
-          </section>
-
-          {/* Delivery + Workers */}
-          <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="lg:col-span-2">
-              <DeliveryTable />
-            </div>
-            <WorkerList />
-          </section>
+    <AppLayout>
+      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">স্বাগতম, রহিম ভাই 👋</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            আজকের ভাটার সংক্ষিপ্ত পরিসংখ্যান এক নজরে দেখুন।
+          </p>
         </div>
+        <div className="flex flex-wrap gap-2">
+          <Link to="/reports" className="h-11 inline-flex items-center rounded-xl border-2 border-border-strong bg-card px-4 text-sm font-semibold hover:bg-secondary transition-colors">
+            রিপোর্ট ডাউনলোড
+          </Link>
+          <Link to="/production" className="h-11 inline-flex items-center rounded-xl border-2 border-success bg-primary px-5 text-sm font-bold text-primary-foreground shadow-card hover:bg-success transition-colors">
+            + নতুন উৎপাদন
+          </Link>
+        </div>
+      </div>
 
-        {/* Floating action button (mobile) */}
-        <button
-          aria-label="দ্রুত যোগ করুন"
-          className="md:hidden fixed bottom-20 right-4 z-40 flex h-14 w-14 items-center justify-center rounded-2xl border-2 border-success bg-primary text-primary-foreground shadow-lg active:translate-y-0.5"
-        >
-          <Plus className="h-6 w-6" />
-        </button>
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {stats.map((s) => <StatCard key={s.title} {...s} />)}
+      </section>
 
-        <MobileNav />
-      </SidebarInset>
-    </SidebarProvider>
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2"><ProductionChart /></div>
+        <ExpenseForm />
+      </section>
+
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2"><DeliveryTable /></div>
+        <WorkerList />
+      </section>
+    </AppLayout>
   );
 }
