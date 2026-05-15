@@ -58,6 +58,7 @@ const items: Item[] = [
     icon: BookOpen,
     children: [
       { title: "হিসাব সারাংশ", url: "/accounts", icon: BookOpen },
+      { title: "অ্যাকাউন্ট তালিকা", url: "/accounts/list", icon: Users },
       { title: "আয় যোগ", url: "/accounts/income", icon: TrendingUp },
       { title: "খরচ যোগ", url: "/accounts/expense", icon: TrendingDown },
       { title: "টাকা গ্রহণ", url: "/accounts/receive", icon: HandCoins },
