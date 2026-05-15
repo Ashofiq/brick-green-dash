@@ -4,7 +4,7 @@ import { AppLayout } from "@/components/dashboard/AppLayout";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { ProductionChart } from "@/components/dashboard/ProductionChart";
 
-export const Route = createFileRoute("/reports")({
+export const Route = createFileRoute("/reports/")({
   component: ReportsPage,
 });
 

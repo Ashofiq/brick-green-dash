@@ -69,7 +69,15 @@ const items: Item[] = [
       { title: "সাপ্লায়ার বাকি", url: "/accounts/supplier-due", icon: Building },
     ],
   },
-  { title: "রিপোর্ট", url: "/reports", icon: BarChart3 },
+  {
+    title: "রিপোর্ট",
+    url: "/reports",
+    icon: BarChart3,
+    children: [
+      { title: "রিপোর্ট সারাংশ", url: "/reports", icon: BarChart3 },
+      { title: "খতিয়ান রিপোর্ট", url: "/reports/ledger", icon: BookOpen },
+    ],
+  },
   { title: "এসএমএস", url: "/sms", icon: Bell },
   { title: "বেতন", url: "/salary", icon: BadgeDollarSign },
   { title: "সেটিংস", url: "/settings", icon: Settings },

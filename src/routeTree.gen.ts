@@ -14,7 +14,6 @@ import { Route as SoilRouteImport } from './routes/soil'
 import { Route as SmsRouteImport } from './routes/sms'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SalaryRouteImport } from './routes/salary'
-import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as ProductionRouteImport } from './routes/production'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LaborRouteImport } from './routes/labor'
@@ -22,8 +21,10 @@ import { Route as ExpensesRouteImport } from './routes/expenses'
 import { Route as DeliveryRouteImport } from './routes/delivery'
 import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ReportsIndexRouteImport } from './routes/reports.index'
 import { Route as OrdersIndexRouteImport } from './routes/orders.index'
 import { Route as AccountsIndexRouteImport } from './routes/accounts.index'
+import { Route as ReportsLedgerRouteImport } from './routes/reports.ledger'
 import { Route as OrdersNewRouteImport } from './routes/orders.new'
 import { Route as OrdersOrderIdRouteImport } from './routes/orders.$orderId'
 import { Route as AccountsTransactionsRouteImport } from './routes/accounts.transactions'
@@ -58,11 +59,6 @@ const SettingsRoute = SettingsRouteImport.update({
 const SalaryRoute = SalaryRouteImport.update({
   id: '/salary',
   path: '/salary',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ReportsRoute = ReportsRouteImport.update({
-  id: '/reports',
-  path: '/reports',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductionRoute = ProductionRouteImport.update({
@@ -100,6 +96,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReportsIndexRoute = ReportsIndexRouteImport.update({
+  id: '/reports/',
+  path: '/reports/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OrdersIndexRoute = OrdersIndexRouteImport.update({
   id: '/orders/',
   path: '/orders/',
@@ -109,6 +110,11 @@ const AccountsIndexRoute = AccountsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AccountsRoute,
+} as any)
+const ReportsLedgerRoute = ReportsLedgerRouteImport.update({
+  id: '/reports/ledger',
+  path: '/reports/ledger',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const OrdersNewRoute = OrdersNewRouteImport.update({
   id: '/orders/new',
@@ -169,7 +175,6 @@ export interface FileRoutesByFullPath {
   '/labor': typeof LaborRoute
   '/login': typeof LoginRoute
   '/production': typeof ProductionRoute
-  '/reports': typeof ReportsRoute
   '/salary': typeof SalaryRoute
   '/settings': typeof SettingsRoute
   '/sms': typeof SmsRoute
@@ -185,8 +190,10 @@ export interface FileRoutesByFullPath {
   '/accounts/transactions': typeof AccountsTransactionsRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
+  '/reports/ledger': typeof ReportsLedgerRoute
   '/accounts/': typeof AccountsIndexRoute
   '/orders/': typeof OrdersIndexRoute
+  '/reports/': typeof ReportsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -195,7 +202,6 @@ export interface FileRoutesByTo {
   '/labor': typeof LaborRoute
   '/login': typeof LoginRoute
   '/production': typeof ProductionRoute
-  '/reports': typeof ReportsRoute
   '/salary': typeof SalaryRoute
   '/settings': typeof SettingsRoute
   '/sms': typeof SmsRoute
@@ -211,8 +217,10 @@ export interface FileRoutesByTo {
   '/accounts/transactions': typeof AccountsTransactionsRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
+  '/reports/ledger': typeof ReportsLedgerRoute
   '/accounts': typeof AccountsIndexRoute
   '/orders': typeof OrdersIndexRoute
+  '/reports': typeof ReportsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -223,7 +231,6 @@ export interface FileRoutesById {
   '/labor': typeof LaborRoute
   '/login': typeof LoginRoute
   '/production': typeof ProductionRoute
-  '/reports': typeof ReportsRoute
   '/salary': typeof SalaryRoute
   '/settings': typeof SettingsRoute
   '/sms': typeof SmsRoute
@@ -239,8 +246,10 @@ export interface FileRoutesById {
   '/accounts/transactions': typeof AccountsTransactionsRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
+  '/reports/ledger': typeof ReportsLedgerRoute
   '/accounts/': typeof AccountsIndexRoute
   '/orders/': typeof OrdersIndexRoute
+  '/reports/': typeof ReportsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -252,7 +261,6 @@ export interface FileRouteTypes {
     | '/labor'
     | '/login'
     | '/production'
-    | '/reports'
     | '/salary'
     | '/settings'
     | '/sms'
@@ -268,8 +276,10 @@ export interface FileRouteTypes {
     | '/accounts/transactions'
     | '/orders/$orderId'
     | '/orders/new'
+    | '/reports/ledger'
     | '/accounts/'
     | '/orders/'
+    | '/reports/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -278,7 +288,6 @@ export interface FileRouteTypes {
     | '/labor'
     | '/login'
     | '/production'
-    | '/reports'
     | '/salary'
     | '/settings'
     | '/sms'
@@ -294,8 +303,10 @@ export interface FileRouteTypes {
     | '/accounts/transactions'
     | '/orders/$orderId'
     | '/orders/new'
+    | '/reports/ledger'
     | '/accounts'
     | '/orders'
+    | '/reports'
   id:
     | '__root__'
     | '/'
@@ -305,7 +316,6 @@ export interface FileRouteTypes {
     | '/labor'
     | '/login'
     | '/production'
-    | '/reports'
     | '/salary'
     | '/settings'
     | '/sms'
@@ -321,8 +331,10 @@ export interface FileRouteTypes {
     | '/accounts/transactions'
     | '/orders/$orderId'
     | '/orders/new'
+    | '/reports/ledger'
     | '/accounts/'
     | '/orders/'
+    | '/reports/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -333,7 +345,6 @@ export interface RootRouteChildren {
   LaborRoute: typeof LaborRoute
   LoginRoute: typeof LoginRoute
   ProductionRoute: typeof ProductionRoute
-  ReportsRoute: typeof ReportsRoute
   SalaryRoute: typeof SalaryRoute
   SettingsRoute: typeof SettingsRoute
   SmsRoute: typeof SmsRoute
@@ -341,7 +352,9 @@ export interface RootRouteChildren {
   StockRoute: typeof StockRoute
   OrdersOrderIdRoute: typeof OrdersOrderIdRoute
   OrdersNewRoute: typeof OrdersNewRoute
+  ReportsLedgerRoute: typeof ReportsLedgerRoute
   OrdersIndexRoute: typeof OrdersIndexRoute
+  ReportsIndexRoute: typeof ReportsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -379,13 +392,6 @@ declare module '@tanstack/react-router' {
       path: '/salary'
       fullPath: '/salary'
       preLoaderRoute: typeof SalaryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reports': {
-      id: '/reports'
-      path: '/reports'
-      fullPath: '/reports'
-      preLoaderRoute: typeof ReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/production': {
@@ -437,6 +443,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reports/': {
+      id: '/reports/'
+      path: '/reports'
+      fullPath: '/reports/'
+      preLoaderRoute: typeof ReportsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/orders/': {
       id: '/orders/'
       path: '/orders'
@@ -450,6 +463,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/accounts/'
       preLoaderRoute: typeof AccountsIndexRouteImport
       parentRoute: typeof AccountsRoute
+    }
+    '/reports/ledger': {
+      id: '/reports/ledger'
+      path: '/reports/ledger'
+      fullPath: '/reports/ledger'
+      preLoaderRoute: typeof ReportsLedgerRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/orders/new': {
       id: '/orders/new'
@@ -560,7 +580,6 @@ const rootRouteChildren: RootRouteChildren = {
   LaborRoute: LaborRoute,
   LoginRoute: LoginRoute,
   ProductionRoute: ProductionRoute,
-  ReportsRoute: ReportsRoute,
   SalaryRoute: SalaryRoute,
   SettingsRoute: SettingsRoute,
   SmsRoute: SmsRoute,
@@ -568,7 +587,9 @@ const rootRouteChildren: RootRouteChildren = {
   StockRoute: StockRoute,
   OrdersOrderIdRoute: OrdersOrderIdRoute,
   OrdersNewRoute: OrdersNewRoute,
+  ReportsLedgerRoute: ReportsLedgerRoute,
   OrdersIndexRoute: OrdersIndexRoute,
+  ReportsIndexRoute: ReportsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
