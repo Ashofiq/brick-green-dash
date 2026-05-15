@@ -112,9 +112,9 @@ const AccountsIndexRoute = AccountsIndexRouteImport.update({
   getParentRoute: () => AccountsRoute,
 } as any)
 const ReportsLedgerRoute = ReportsLedgerRouteImport.update({
-  id: '/ledger',
-  path: '/ledger',
-  getParentRoute: () => ReportsRoute,
+  id: '/reports/ledger',
+  path: '/reports/ledger',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const OrdersNewRoute = OrdersNewRouteImport.update({
   id: '/orders/new',
@@ -352,6 +352,7 @@ export interface RootRouteChildren {
   StockRoute: typeof StockRoute
   OrdersOrderIdRoute: typeof OrdersOrderIdRoute
   OrdersNewRoute: typeof OrdersNewRoute
+  ReportsLedgerRoute: typeof ReportsLedgerRoute
   OrdersIndexRoute: typeof OrdersIndexRoute
   ReportsIndexRoute: typeof ReportsIndexRoute
 }
@@ -465,10 +466,10 @@ declare module '@tanstack/react-router' {
     }
     '/reports/ledger': {
       id: '/reports/ledger'
-      path: '/ledger'
+      path: '/reports/ledger'
       fullPath: '/reports/ledger'
       preLoaderRoute: typeof ReportsLedgerRouteImport
-      parentRoute: typeof ReportsRoute
+      parentRoute: typeof rootRouteImport
     }
     '/orders/new': {
       id: '/orders/new'
@@ -586,19 +587,10 @@ const rootRouteChildren: RootRouteChildren = {
   StockRoute: StockRoute,
   OrdersOrderIdRoute: OrdersOrderIdRoute,
   OrdersNewRoute: OrdersNewRoute,
+  ReportsLedgerRoute: ReportsLedgerRoute,
   OrdersIndexRoute: OrdersIndexRoute,
   ReportsIndexRoute: ReportsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
