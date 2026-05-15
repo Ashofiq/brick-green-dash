@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/dashboard/PageHeader";
 import { Badge } from "./production";
 import { orders, bnMoney, bnNum, statusTone, toBn, type OrderStatus } from "@/lib/orders-data";
 
-export const Route = createFileRoute("/orders")({
+export const Route = createFileRoute("/orders/")({
   component: OrdersPage,
 });
 
