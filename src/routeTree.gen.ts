@@ -19,9 +19,9 @@ import { Route as ProductionRouteImport } from './routes/production'
 import { Route as LaborRouteImport } from './routes/labor'
 import { Route as ExpensesRouteImport } from './routes/expenses'
 import { Route as DeliveryRouteImport } from './routes/delivery'
-import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as OrdersIndexRouteImport } from './routes/orders.index'
+import { Route as AccountsIndexRouteImport } from './routes/accounts.index'
 import { Route as OrdersNewRouteImport } from './routes/orders.new'
 import { Route as OrdersOrderIdRouteImport } from './routes/orders.$orderId'
 
@@ -75,11 +75,6 @@ const DeliveryRoute = DeliveryRouteImport.update({
   path: '/delivery',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AccountsRoute = AccountsRouteImport.update({
-  id: '/accounts',
-  path: '/accounts',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -88,6 +83,11 @@ const IndexRoute = IndexRouteImport.update({
 const OrdersIndexRoute = OrdersIndexRouteImport.update({
   id: '/orders/',
   path: '/orders/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountsIndexRoute = AccountsIndexRouteImport.update({
+  id: '/accounts/',
+  path: '/accounts/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrdersNewRoute = OrdersNewRouteImport.update({
@@ -103,7 +103,6 @@ const OrdersOrderIdRoute = OrdersOrderIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/accounts': typeof AccountsRoute
   '/delivery': typeof DeliveryRoute
   '/expenses': typeof ExpensesRoute
   '/labor': typeof LaborRoute
@@ -116,11 +115,11 @@ export interface FileRoutesByFullPath {
   '/stock': typeof StockRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
+  '/accounts/': typeof AccountsIndexRoute
   '/orders/': typeof OrdersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/accounts': typeof AccountsRoute
   '/delivery': typeof DeliveryRoute
   '/expenses': typeof ExpensesRoute
   '/labor': typeof LaborRoute
@@ -133,12 +132,12 @@ export interface FileRoutesByTo {
   '/stock': typeof StockRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
+  '/accounts': typeof AccountsIndexRoute
   '/orders': typeof OrdersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/accounts': typeof AccountsRoute
   '/delivery': typeof DeliveryRoute
   '/expenses': typeof ExpensesRoute
   '/labor': typeof LaborRoute
@@ -151,13 +150,13 @@ export interface FileRoutesById {
   '/stock': typeof StockRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
+  '/accounts/': typeof AccountsIndexRoute
   '/orders/': typeof OrdersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/accounts'
     | '/delivery'
     | '/expenses'
     | '/labor'
@@ -170,11 +169,11 @@ export interface FileRouteTypes {
     | '/stock'
     | '/orders/$orderId'
     | '/orders/new'
+    | '/accounts/'
     | '/orders/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/accounts'
     | '/delivery'
     | '/expenses'
     | '/labor'
@@ -187,11 +186,11 @@ export interface FileRouteTypes {
     | '/stock'
     | '/orders/$orderId'
     | '/orders/new'
+    | '/accounts'
     | '/orders'
   id:
     | '__root__'
     | '/'
-    | '/accounts'
     | '/delivery'
     | '/expenses'
     | '/labor'
@@ -204,12 +203,12 @@ export interface FileRouteTypes {
     | '/stock'
     | '/orders/$orderId'
     | '/orders/new'
+    | '/accounts/'
     | '/orders/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AccountsRoute: typeof AccountsRoute
   DeliveryRoute: typeof DeliveryRoute
   ExpensesRoute: typeof ExpensesRoute
   LaborRoute: typeof LaborRoute
@@ -220,6 +219,7 @@ export interface RootRouteChildren {
   SmsRoute: typeof SmsRoute
   SoilRoute: typeof SoilRoute
   StockRoute: typeof StockRoute
+  AccountsIndexRoute: typeof AccountsIndexRoute
   OrdersIndexRoute: typeof OrdersIndexRoute
 }
 
@@ -295,13 +295,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DeliveryRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/accounts': {
-      id: '/accounts'
-      path: '/accounts'
-      fullPath: '/accounts'
-      preLoaderRoute: typeof AccountsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -314,6 +307,13 @@ declare module '@tanstack/react-router' {
       path: '/orders'
       fullPath: '/orders/'
       preLoaderRoute: typeof OrdersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/accounts/': {
+      id: '/accounts/'
+      path: '/accounts'
+      fullPath: '/accounts/'
+      preLoaderRoute: typeof AccountsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/orders/new': {
@@ -335,7 +335,6 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AccountsRoute: AccountsRoute,
   DeliveryRoute: DeliveryRoute,
   ExpensesRoute: ExpensesRoute,
   LaborRoute: LaborRoute,
@@ -346,6 +345,7 @@ const rootRouteChildren: RootRouteChildren = {
   SmsRoute: SmsRoute,
   SoilRoute: SoilRoute,
   StockRoute: StockRoute,
+  AccountsIndexRoute: AccountsIndexRoute,
   OrdersIndexRoute: OrdersIndexRoute,
 }
 export const routeTree = rootRouteImport

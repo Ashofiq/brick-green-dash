@@ -20,7 +20,7 @@ import {
 import { AppLayout } from "@/components/dashboard/AppLayout";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 
-export const Route = createFileRoute("/accounts")({
+export const Route = createFileRoute("/accounts/")({
   component: AccountsPage,
 });
 
