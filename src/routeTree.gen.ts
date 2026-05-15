@@ -25,6 +25,10 @@ import { Route as OrdersIndexRouteImport } from './routes/orders.index'
 import { Route as AccountsIndexRouteImport } from './routes/accounts.index'
 import { Route as OrdersNewRouteImport } from './routes/orders.new'
 import { Route as OrdersOrderIdRouteImport } from './routes/orders.$orderId'
+import { Route as AccountsReceiveRouteImport } from './routes/accounts.receive'
+import { Route as AccountsPaymentRouteImport } from './routes/accounts.payment'
+import { Route as AccountsIncomeRouteImport } from './routes/accounts.income'
+import { Route as AccountsExpenseRouteImport } from './routes/accounts.expense'
 
 const StockRoute = StockRouteImport.update({
   id: '/stock',
@@ -106,6 +110,26 @@ const OrdersOrderIdRoute = OrdersOrderIdRouteImport.update({
   path: '/$orderId',
   getParentRoute: () => OrdersRoute,
 } as any)
+const AccountsReceiveRoute = AccountsReceiveRouteImport.update({
+  id: '/receive',
+  path: '/receive',
+  getParentRoute: () => AccountsRoute,
+} as any)
+const AccountsPaymentRoute = AccountsPaymentRouteImport.update({
+  id: '/payment',
+  path: '/payment',
+  getParentRoute: () => AccountsRoute,
+} as any)
+const AccountsIncomeRoute = AccountsIncomeRouteImport.update({
+  id: '/income',
+  path: '/income',
+  getParentRoute: () => AccountsRoute,
+} as any)
+const AccountsExpenseRoute = AccountsExpenseRouteImport.update({
+  id: '/expense',
+  path: '/expense',
+  getParentRoute: () => AccountsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -120,6 +144,10 @@ export interface FileRoutesByFullPath {
   '/sms': typeof SmsRoute
   '/soil': typeof SoilRoute
   '/stock': typeof StockRoute
+  '/accounts/expense': typeof AccountsExpenseRoute
+  '/accounts/income': typeof AccountsIncomeRoute
+  '/accounts/payment': typeof AccountsPaymentRoute
+  '/accounts/receive': typeof AccountsReceiveRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
   '/accounts/': typeof AccountsIndexRoute
@@ -137,6 +165,10 @@ export interface FileRoutesByTo {
   '/sms': typeof SmsRoute
   '/soil': typeof SoilRoute
   '/stock': typeof StockRoute
+  '/accounts/expense': typeof AccountsExpenseRoute
+  '/accounts/income': typeof AccountsIncomeRoute
+  '/accounts/payment': typeof AccountsPaymentRoute
+  '/accounts/receive': typeof AccountsReceiveRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
   '/accounts': typeof AccountsIndexRoute
@@ -156,6 +188,10 @@ export interface FileRoutesById {
   '/sms': typeof SmsRoute
   '/soil': typeof SoilRoute
   '/stock': typeof StockRoute
+  '/accounts/expense': typeof AccountsExpenseRoute
+  '/accounts/income': typeof AccountsIncomeRoute
+  '/accounts/payment': typeof AccountsPaymentRoute
+  '/accounts/receive': typeof AccountsReceiveRoute
   '/orders/$orderId': typeof OrdersOrderIdRoute
   '/orders/new': typeof OrdersNewRoute
   '/accounts/': typeof AccountsIndexRoute
@@ -176,6 +212,10 @@ export interface FileRouteTypes {
     | '/sms'
     | '/soil'
     | '/stock'
+    | '/accounts/expense'
+    | '/accounts/income'
+    | '/accounts/payment'
+    | '/accounts/receive'
     | '/orders/$orderId'
     | '/orders/new'
     | '/accounts/'
@@ -193,6 +233,10 @@ export interface FileRouteTypes {
     | '/sms'
     | '/soil'
     | '/stock'
+    | '/accounts/expense'
+    | '/accounts/income'
+    | '/accounts/payment'
+    | '/accounts/receive'
     | '/orders/$orderId'
     | '/orders/new'
     | '/accounts'
@@ -211,6 +255,10 @@ export interface FileRouteTypes {
     | '/sms'
     | '/soil'
     | '/stock'
+    | '/accounts/expense'
+    | '/accounts/income'
+    | '/accounts/payment'
+    | '/accounts/receive'
     | '/orders/$orderId'
     | '/orders/new'
     | '/accounts/'
@@ -347,14 +395,50 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrdersOrderIdRouteImport
       parentRoute: typeof OrdersRoute
     }
+    '/accounts/receive': {
+      id: '/accounts/receive'
+      path: '/receive'
+      fullPath: '/accounts/receive'
+      preLoaderRoute: typeof AccountsReceiveRouteImport
+      parentRoute: typeof AccountsRoute
+    }
+    '/accounts/payment': {
+      id: '/accounts/payment'
+      path: '/payment'
+      fullPath: '/accounts/payment'
+      preLoaderRoute: typeof AccountsPaymentRouteImport
+      parentRoute: typeof AccountsRoute
+    }
+    '/accounts/income': {
+      id: '/accounts/income'
+      path: '/income'
+      fullPath: '/accounts/income'
+      preLoaderRoute: typeof AccountsIncomeRouteImport
+      parentRoute: typeof AccountsRoute
+    }
+    '/accounts/expense': {
+      id: '/accounts/expense'
+      path: '/expense'
+      fullPath: '/accounts/expense'
+      preLoaderRoute: typeof AccountsExpenseRouteImport
+      parentRoute: typeof AccountsRoute
+    }
   }
 }
 
 interface AccountsRouteChildren {
+  AccountsExpenseRoute: typeof AccountsExpenseRoute
+  AccountsIncomeRoute: typeof AccountsIncomeRoute
+  AccountsPaymentRoute: typeof AccountsPaymentRoute
+  AccountsReceiveRoute: typeof AccountsReceiveRoute
   AccountsIndexRoute: typeof AccountsIndexRoute
 }
 
 const AccountsRouteChildren: AccountsRouteChildren = {
+  AccountsExpenseRoute: AccountsExpenseRoute,
+  AccountsIncomeRoute: AccountsIncomeRoute,
+  AccountsPaymentRoute: AccountsPaymentRoute,
+  AccountsReceiveRoute: AccountsReceiveRoute,
   AccountsIndexRoute: AccountsIndexRoute,
 }
 
