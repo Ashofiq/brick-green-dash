@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   BookOpen,
@@ -16,6 +16,11 @@ import {
   Calendar,
   Check,
   Printer,
+  HandCoins,
+  Send,
+  UserCheck,
+  Building,
+  ChevronRight,
 } from "lucide-react";
 import { AppLayout } from "@/components/dashboard/AppLayout";
 import { PageHeader } from "@/components/dashboard/PageHeader";
