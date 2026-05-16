@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VoucherRouteImport } from './routes/voucher'
 import { Route as StockRouteImport } from './routes/stock'
 import { Route as SoilRouteImport } from './routes/soil'
 import { Route as SmsRouteImport } from './routes/sms'
@@ -36,6 +37,11 @@ import { Route as AccountsIncomeRouteImport } from './routes/accounts.income'
 import { Route as AccountsExpenseRouteImport } from './routes/accounts.expense'
 import { Route as AccountsCustomerDueRouteImport } from './routes/accounts.customer-due'
 
+const VoucherRoute = VoucherRouteImport.update({
+  id: '/voucher',
+  path: '/voucher',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StockRoute = StockRouteImport.update({
   id: '/stock',
   path: '/stock',
@@ -180,6 +186,7 @@ export interface FileRoutesByFullPath {
   '/sms': typeof SmsRoute
   '/soil': typeof SoilRoute
   '/stock': typeof StockRoute
+  '/voucher': typeof VoucherRoute
   '/accounts/customer-due': typeof AccountsCustomerDueRoute
   '/accounts/expense': typeof AccountsExpenseRoute
   '/accounts/income': typeof AccountsIncomeRoute
@@ -207,6 +214,7 @@ export interface FileRoutesByTo {
   '/sms': typeof SmsRoute
   '/soil': typeof SoilRoute
   '/stock': typeof StockRoute
+  '/voucher': typeof VoucherRoute
   '/accounts/customer-due': typeof AccountsCustomerDueRoute
   '/accounts/expense': typeof AccountsExpenseRoute
   '/accounts/income': typeof AccountsIncomeRoute
@@ -236,6 +244,7 @@ export interface FileRoutesById {
   '/sms': typeof SmsRoute
   '/soil': typeof SoilRoute
   '/stock': typeof StockRoute
+  '/voucher': typeof VoucherRoute
   '/accounts/customer-due': typeof AccountsCustomerDueRoute
   '/accounts/expense': typeof AccountsExpenseRoute
   '/accounts/income': typeof AccountsIncomeRoute
@@ -266,6 +275,7 @@ export interface FileRouteTypes {
     | '/sms'
     | '/soil'
     | '/stock'
+    | '/voucher'
     | '/accounts/customer-due'
     | '/accounts/expense'
     | '/accounts/income'
@@ -293,6 +303,7 @@ export interface FileRouteTypes {
     | '/sms'
     | '/soil'
     | '/stock'
+    | '/voucher'
     | '/accounts/customer-due'
     | '/accounts/expense'
     | '/accounts/income'
@@ -321,6 +332,7 @@ export interface FileRouteTypes {
     | '/sms'
     | '/soil'
     | '/stock'
+    | '/voucher'
     | '/accounts/customer-due'
     | '/accounts/expense'
     | '/accounts/income'
@@ -350,6 +362,7 @@ export interface RootRouteChildren {
   SmsRoute: typeof SmsRoute
   SoilRoute: typeof SoilRoute
   StockRoute: typeof StockRoute
+  VoucherRoute: typeof VoucherRoute
   OrdersOrderIdRoute: typeof OrdersOrderIdRoute
   OrdersNewRoute: typeof OrdersNewRoute
   ReportsLedgerRoute: typeof ReportsLedgerRoute
@@ -359,6 +372,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/voucher': {
+      id: '/voucher'
+      path: '/voucher'
+      fullPath: '/voucher'
+      preLoaderRoute: typeof VoucherRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/stock': {
       id: '/stock'
       path: '/stock'
@@ -585,6 +605,7 @@ const rootRouteChildren: RootRouteChildren = {
   SmsRoute: SmsRoute,
   SoilRoute: SoilRoute,
   StockRoute: StockRoute,
+  VoucherRoute: VoucherRoute,
   OrdersOrderIdRoute: OrdersOrderIdRoute,
   OrdersNewRoute: OrdersNewRoute,
   ReportsLedgerRoute: ReportsLedgerRoute,

@@ -22,6 +22,7 @@ import {
   UserCheck,
   Building,
   ListChecks,
+  Receipt,
 } from "lucide-react";
 import {
   Sidebar,
@@ -78,6 +79,7 @@ const items: Item[] = [
       { title: "খতিয়ান রিপোর্ট", url: "/reports/ledger", icon: BookOpen },
     ],
   },
+  { title: "রিসিট ভাউচার", url: "/voucher", icon: Receipt },
   { title: "এসএমএস", url: "/sms", icon: Bell },
   { title: "বেতন", url: "/salary", icon: BadgeDollarSign },
   { title: "সেটিংস", url: "/settings", icon: Settings },
