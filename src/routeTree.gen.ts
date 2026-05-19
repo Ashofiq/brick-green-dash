@@ -14,6 +14,7 @@ import { Route as StockRouteImport } from './routes/stock'
 import { Route as SoilRouteImport } from './routes/soil'
 import { Route as SmsRouteImport } from './routes/sms'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SalesRouteImport } from './routes/sales'
 import { Route as SalaryRouteImport } from './routes/salary'
 import { Route as ProductionRouteImport } from './routes/production'
 import { Route as LoginRouteImport } from './routes/login'
@@ -60,6 +61,11 @@ const SmsRoute = SmsRouteImport.update({
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SalesRoute = SalesRouteImport.update({
+  id: '/sales',
+  path: '/sales',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SalaryRoute = SalaryRouteImport.update({
@@ -182,6 +188,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/production': typeof ProductionRoute
   '/salary': typeof SalaryRoute
+  '/sales': typeof SalesRoute
   '/settings': typeof SettingsRoute
   '/sms': typeof SmsRoute
   '/soil': typeof SoilRoute
@@ -210,6 +217,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/production': typeof ProductionRoute
   '/salary': typeof SalaryRoute
+  '/sales': typeof SalesRoute
   '/settings': typeof SettingsRoute
   '/sms': typeof SmsRoute
   '/soil': typeof SoilRoute
@@ -240,6 +248,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/production': typeof ProductionRoute
   '/salary': typeof SalaryRoute
+  '/sales': typeof SalesRoute
   '/settings': typeof SettingsRoute
   '/sms': typeof SmsRoute
   '/soil': typeof SoilRoute
@@ -271,6 +280,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/production'
     | '/salary'
+    | '/sales'
     | '/settings'
     | '/sms'
     | '/soil'
@@ -299,6 +309,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/production'
     | '/salary'
+    | '/sales'
     | '/settings'
     | '/sms'
     | '/soil'
@@ -328,6 +339,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/production'
     | '/salary'
+    | '/sales'
     | '/settings'
     | '/sms'
     | '/soil'
@@ -358,6 +370,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   ProductionRoute: typeof ProductionRoute
   SalaryRoute: typeof SalaryRoute
+  SalesRoute: typeof SalesRoute
   SettingsRoute: typeof SettingsRoute
   SmsRoute: typeof SmsRoute
   SoilRoute: typeof SoilRoute
@@ -405,6 +418,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sales': {
+      id: '/sales'
+      path: '/sales'
+      fullPath: '/sales'
+      preLoaderRoute: typeof SalesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/salary': {
@@ -601,6 +621,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   ProductionRoute: ProductionRoute,
   SalaryRoute: SalaryRoute,
+  SalesRoute: SalesRoute,
   SettingsRoute: SettingsRoute,
   SmsRoute: SmsRoute,
   SoilRoute: SoilRoute,
