@@ -53,6 +53,7 @@ const items: Item[] = [
   { title: "দৈনিক খরচ", url: "/expenses", icon: Wallet },
   { title: "ট্রাক ডেলিভারি", url: "/delivery", icon: Truck },
   { title: "কাস্টমার অর্ডার", url: "/orders", icon: ShoppingCart },
+  { title: "ইট বিক্রি", url: "/sales", icon: BadgeDollarSign },
   { title: "স্টক ব্যবস্থাপনা", url: "/stock", icon: Package },
   {
     title: "হিসাব",
