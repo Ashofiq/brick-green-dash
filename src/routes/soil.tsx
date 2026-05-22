@@ -293,7 +293,7 @@ function SoilPage() {
                     `${toBn(it.trucks)} ট্রাক`,
                     it.kind === "ব্যবহার" ? "—" : `৳ ${toBn(it.total.toLocaleString("en-US"))}`,
                     it.kind === "ব্যবহার" ? "—" : `৳ ${toBn(it.due.toLocaleString("en-US"))}`,
-                    <Badge key={it.id + "b"} tone={it.status === "পরিশোধিত" ? "success" : it.status === "আংশিক" ? "warning" : it.status === "ব্যবহৃত" ? "info" : "danger"}>
+                    <Badge key={it.id + "b"} tone={it.status === "পরিশোধিত" ? "success" : it.status === "আংশিক" ? "warning" : it.status === "ব্যবহৃত" ? "success" : "danger"}>
                       {it.status}
                     </Badge>,
                     <div key={it.id + "a"} className="flex gap-1">
