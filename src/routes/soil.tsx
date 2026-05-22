@@ -1,30 +1,130 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Mountain, Plus } from "lucide-react";
+import { Mountain, Plus, Trash2, Pencil, X, Check } from "lucide-react";
+import { useMemo, useState } from "react";
 import { AppLayout } from "@/components/dashboard/AppLayout";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { DataTable, Badge } from "./production";
+import { useSoil, statusFor, type SoilEntry } from "@/lib/soil-store";
 
 export const Route = createFileRoute("/soil")({
   component: SoilPage,
 });
 
+const inputCls =
+  "h-11 w-full rounded-xl border-2 border-border bg-background px-3 text-sm font-medium focus:border-border-strong focus:outline-none focus:ring-2 focus:ring-ring/30";
+
+function toBn(n: number | string) {
+  const map: Record<string, string> = { "0":"০","1":"১","2":"২","3":"৩","4":"৪","5":"৫","6":"৬","7":"৭","8":"৮","9":"৯" };
+  return String(n).replace(/\d/g, (d) => map[d]);
+}
+
+function fmtDateBn(iso: string) {
+  if (!iso) return "";
+  const [, m, d] = iso.split("-");
+  const months = ["জানু","ফেব","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগ","সেপ্ট","অক্টো","নভে","ডিসে"];
+  return `${toBn(parseInt(d, 10))} ${months[parseInt(m, 10) - 1] ?? ""}`;
+}
+
+const TRUCK_PRICE_DEFAULT = 2000;
+
 function SoilPage() {
-  const rows = [
-    ["১৫ মে", "জমির মালিক — কাশেম", "১২ ট্রাক", "৳ ২৪,০০০", <Badge key="1" tone="success">পরিশোধিত</Badge>],
-    ["১৪ মে", "মাঝিপাড়া খনি", "৮ ট্রাক", "৳ ১৬,০০০", <Badge key="2" tone="warning">বাকি</Badge>],
-    ["১৩ মে", "জমির মালিক — হাবিব", "১৫ ট্রাক", "৳ ৩০,০০০", <Badge key="3" tone="success">পরিশোধিত</Badge>],
-  ];
+  const { items, add, update, remove } = useSoil();
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  const [form, setForm] = useState({
+    date: new Date().toISOString().slice(0, 10),
+    source: "",
+    trucks: "",
+    pricePerTruck: String(TRUCK_PRICE_DEFAULT),
+    paid: "",
+    note: "",
+  });
+
+  const total = (Number(form.trucks) || 0) * (Number(form.pricePerTruck) || 0);
+  const paid = Number(form.paid) || 0;
+  const due = Math.max(0, total - paid);
+
+  const resetForm = () => {
+    setEditingId(null);
+    setForm({
+      date: new Date().toISOString().slice(0, 10),
+      source: "",
+      trucks: "",
+      pricePerTruck: String(TRUCK_PRICE_DEFAULT),
+      paid: "",
+      note: "",
+    });
+  };
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.source.trim() || !form.trucks) return;
+    const payload: Omit<SoilEntry, "id"> = {
+      date: form.date,
+      source: form.source.trim(),
+      trucks: Number(form.trucks),
+      pricePerTruck: Number(form.pricePerTruck) || 0,
+      total,
+      paid,
+      due,
+      status: statusFor(total, paid),
+      note: form.note.trim() || undefined,
+    };
+    if (editingId) update(editingId, payload);
+    else add(payload);
+    resetForm();
+  };
+
+  const onEdit = (it: SoilEntry) => {
+    setEditingId(it.id);
+    setForm({
+      date: it.date,
+      source: it.source,
+      trucks: String(it.trucks),
+      pricePerTruck: String(it.pricePerTruck),
+      paid: String(it.paid),
+      note: it.note ?? "",
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const onDelete = (id: string) => {
+    if (confirm("এই এন্ট্রিটি মুছে ফেলবেন?")) remove(id);
+  };
+
+  const stats = useMemo(() => {
+    const totalTrucks = items.reduce((s, x) => s + x.trucks, 0);
+    const thisMonth = items
+      .filter((x) => x.date.slice(0, 7) === new Date().toISOString().slice(0, 7))
+      .reduce((s, x) => s + x.trucks, 0);
+    const totalDue = items.reduce((s, x) => s + x.due, 0);
+    const totalSpend = items.reduce((s, x) => s + x.total, 0);
+    return { totalTrucks, thisMonth, totalDue, totalSpend };
+  }, [items]);
+
   return (
     <AppLayout>
-      <PageHeader icon={Mountain} title="মাটি ব্যবস্থাপনা" subtitle="মাটি সংগ্রহ ও মজুদ"
-        actions={<button className="h-11 inline-flex items-center gap-2 rounded-xl border-2 border-success bg-primary px-4 text-sm font-bold text-primary-foreground hover:bg-success"><Plus className="h-4 w-4" /> মাটি যোগ করুন</button>} />
+      <PageHeader
+        icon={Mountain}
+        title="মাটি ব্যবস্থাপনা"
+        subtitle="মাটি সংগ্রহ যোগ, পরিবর্তন ও মুছুন"
+        actions={
+          <button
+            type="button"
+            onClick={resetForm}
+            className="h-11 inline-flex items-center gap-2 rounded-xl border-2 border-border-strong bg-card px-4 text-sm font-bold hover:bg-secondary"
+          >
+            <Plus className="h-4 w-4" /> নতুন এন্ট্রি
+          </button>
+        }
+      />
 
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { l: "মোট মজুদ", v: "৬৮০ টন" },
-          { l: "এই মাসের সংগ্রহ", v: "১,২০০ টন" },
-          { l: "ব্যবহার", v: "৫২০ টন" },
-          { l: "বাকি পরিশোধ", v: "৳ ৪৫,০০০" },
+          { l: "মোট ট্রাক", v: `${toBn(stats.totalTrucks)} ট্রাক` },
+          { l: "এই মাসের সংগ্রহ", v: `${toBn(stats.thisMonth)} ট্রাক` },
+          { l: "মোট খরচ", v: `৳ ${toBn(stats.totalSpend.toLocaleString("en-US"))}` },
+          { l: "বাকি পরিশোধ", v: `৳ ${toBn(stats.totalDue.toLocaleString("en-US"))}` },
         ].map((s) => (
           <div key={s.l} className="rounded-2xl border-2 border-border-strong bg-card p-5 shadow-card">
             <p className="text-sm text-muted-foreground">{s.l}</p>
@@ -33,7 +133,147 @@ function SoilPage() {
         ))}
       </section>
 
-      <DataTable title="মাটি সংগ্রহ" columns={["তারিখ", "উৎস", "পরিমাণ", "মূল্য", "অবস্থা"]} rows={rows} />
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <form
+          onSubmit={onSubmit}
+          className="lg:col-span-1 rounded-2xl border-2 border-border-strong bg-card p-5 shadow-card space-y-3"
+        >
+          <div className="flex items-center justify-between border-b-2 border-border-strong pb-3">
+            <h3 className="text-lg font-bold">{editingId ? "এন্ট্রি পরিবর্তন" : "মাটি যোগ করুন"}</h3>
+            {editingId && (
+              <button type="button" onClick={resetForm} className="text-muted-foreground hover:text-foreground">
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-semibold">তারিখ</label>
+            <input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className={inputCls} />
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-semibold">উৎস / সরবরাহকারী</label>
+            <input
+              type="text"
+              placeholder="যেমন: কাশেম মিয়া"
+              value={form.source}
+              onChange={(e) => setForm({ ...form, source: e.target.value })}
+              className={inputCls}
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="mb-1.5 block text-sm font-semibold">ট্রাক সংখ্যা</label>
+              <input
+                type="number"
+                inputMode="numeric"
+                min={0}
+                placeholder="১০"
+                value={form.trucks}
+                onChange={(e) => setForm({ ...form, trucks: e.target.value })}
+                className={inputCls}
+              />
+            </div>
+            <div>
+              <label className="mb-1.5 block text-sm font-semibold">প্রতি ট্রাক (৳)</label>
+              <input
+                type="number"
+                inputMode="numeric"
+                min={0}
+                value={form.pricePerTruck}
+                onChange={(e) => setForm({ ...form, pricePerTruck: e.target.value })}
+                className={inputCls}
+              />
+            </div>
+          </div>
+
+          <div className="rounded-xl border-2 border-border bg-background p-3">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground">মোট মূল্য</span>
+              <span className="text-lg font-bold">৳ {toBn(total.toLocaleString("en-US"))}</span>
+            </div>
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-semibold">পরিশোধিত (৳)</label>
+            <input
+              type="number"
+              inputMode="numeric"
+              min={0}
+              placeholder="০"
+              value={form.paid}
+              onChange={(e) => setForm({ ...form, paid: e.target.value })}
+              className={inputCls}
+            />
+            <div className="mt-1 flex gap-2">
+              <button type="button" onClick={() => setForm({ ...form, paid: String(total) })} className="rounded-lg border-2 border-border px-2 py-1 text-xs font-semibold hover:bg-secondary">পুরো</button>
+              <button type="button" onClick={() => setForm({ ...form, paid: String(Math.round(total / 2)) })} className="rounded-lg border-2 border-border px-2 py-1 text-xs font-semibold hover:bg-secondary">অর্ধেক</button>
+              <button type="button" onClick={() => setForm({ ...form, paid: "0" })} className="rounded-lg border-2 border-border px-2 py-1 text-xs font-semibold hover:bg-secondary">বাকি রাখুন</button>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">বাকি: ৳ {toBn(due.toLocaleString("en-US"))}</p>
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-semibold">নোট (ঐচ্ছিক)</label>
+            <textarea
+              rows={2}
+              value={form.note}
+              onChange={(e) => setForm({ ...form, note: e.target.value })}
+              className="w-full rounded-xl border-2 border-border bg-background p-3 text-sm font-medium focus:border-border-strong focus:outline-none focus:ring-2 focus:ring-ring/30"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="h-12 w-full inline-flex items-center justify-center gap-2 rounded-xl border-2 border-success bg-primary text-primary-foreground font-bold hover:bg-success"
+          >
+            <Check className="h-4 w-4" /> {editingId ? "আপডেট করুন" : "সংরক্ষণ করুন"}
+          </button>
+        </form>
+
+        <div className="lg:col-span-2">
+          <DataTable
+            title={`মাটি সংগ্রহ তালিকা (${toBn(items.length)})`}
+            columns={["তারিখ", "উৎস", "ট্রাক", "মূল্য", "পরিশোধিত", "বাকি", "অবস্থা", "অ্যাকশন"]}
+            rows={
+              items.length === 0
+                ? [[<span key="e" className="text-muted-foreground text-sm">কোনো এন্ট্রি নেই — বাঁ দিকে ফর্ম থেকে যোগ করুন।</span>, "", "", "", "", "", "", ""]]
+                : items.map((it) => [
+                    fmtDateBn(it.date),
+                    <div key={it.id + "s"}>
+                      <div className="font-semibold">{it.source}</div>
+                      {it.note && <div className="text-xs text-muted-foreground">{it.note}</div>}
+                    </div>,
+                    `${toBn(it.trucks)} ট্রাক`,
+                    `৳ ${toBn(it.total.toLocaleString("en-US"))}`,
+                    `৳ ${toBn(it.paid.toLocaleString("en-US"))}`,
+                    `৳ ${toBn(it.due.toLocaleString("en-US"))}`,
+                    <Badge key={it.id + "b"} tone={it.status === "পরিশোধিত" ? "success" : it.status === "আংশিক" ? "warning" : "danger"}>
+                      {it.status}
+                    </Badge>,
+                    <div key={it.id + "a"} className="flex gap-1">
+                      <button
+                        onClick={() => onEdit(it)}
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border-2 border-border hover:bg-secondary"
+                        title="পরিবর্তন"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        onClick={() => onDelete(it.id)}
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border-2 border-destructive/40 text-destructive hover:bg-destructive/10"
+                        title="মুছুন"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>,
+                  ])
+            }
+          />
+        </div>
+      </section>
     </AppLayout>
   );
 }
