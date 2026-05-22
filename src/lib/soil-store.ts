@@ -1,24 +1,28 @@
 import { useEffect, useState } from "react";
 
+export type SoilKind = "সংগ্রহ" | "ব্যবহার";
+
 export type SoilEntry = {
   id: string;
   date: string; // ISO yyyy-mm-dd
-  source: string;
+  kind: SoilKind; // সংগ্রহ = stock in, ব্যবহার = stock out
+  source: string; // for সংগ্রহ: supplier; for ব্যবহার: purpose/batch
   trucks: number;
-  pricePerTruck: number;
+  pricePerTruck: number; // 0 for ব্যবহার
   total: number;
   paid: number;
   due: number;
-  status: "পরিশোধিত" | "আংশিক" | "বাকি";
+  status: "পরিশোধিত" | "আংশিক" | "বাকি" | "ব্যবহৃত";
   note?: string;
 };
 
-const KEY = "soil_entries_v1";
+const KEY = "soil_entries_v2";
 
 const seed: SoilEntry[] = [
-  { id: "SOIL-0001", date: "2026-05-15", source: "জমির মালিক — কাশেম", trucks: 12, pricePerTruck: 2000, total: 24000, paid: 24000, due: 0, status: "পরিশোধিত" },
-  { id: "SOIL-0002", date: "2026-05-14", source: "মাঝিপাড়া খনি", trucks: 8, pricePerTruck: 2000, total: 16000, paid: 0, due: 16000, status: "বাকি" },
-  { id: "SOIL-0003", date: "2026-05-13", source: "জমির মালিক — হাবিব", trucks: 15, pricePerTruck: 2000, total: 30000, paid: 30000, due: 0, status: "পরিশোধিত" },
+  { id: "SOIL-0001", date: "2026-05-15", kind: "সংগ্রহ", source: "জমির মালিক — কাশেম", trucks: 12, pricePerTruck: 2000, total: 24000, paid: 24000, due: 0, status: "পরিশোধিত" },
+  { id: "SOIL-0002", date: "2026-05-14", kind: "সংগ্রহ", source: "মাঝিপাড়া খনি", trucks: 8, pricePerTruck: 2000, total: 16000, paid: 0, due: 16000, status: "বাকি" },
+  { id: "SOIL-0003", date: "2026-05-13", kind: "সংগ্রহ", source: "জমির মালিক — হাবিব", trucks: 15, pricePerTruck: 2000, total: 30000, paid: 30000, due: 0, status: "পরিশোধিত" },
+  { id: "SOIL-0004", date: "2026-05-16", kind: "ব্যবহার", source: "উৎপাদন ব্যাচ #১২ — কাঁচা ইট তৈরি", trucks: 6, pricePerTruck: 0, total: 0, paid: 0, due: 0, status: "ব্যবহৃত" },
 ];
 
 function read(): SoilEntry[] {
@@ -73,4 +77,10 @@ export function statusFor(total: number, paid: number): SoilEntry["status"] {
   if (paid >= total && total > 0) return "পরিশোধিত";
   if (paid <= 0) return "বাকি";
   return "আংশিক";
+}
+
+export function soilStock(items: SoilEntry[]) {
+  const inTrucks = items.filter((x) => x.kind === "সংগ্রহ").reduce((s, x) => s + x.trucks, 0);
+  const outTrucks = items.filter((x) => x.kind === "ব্যবহার").reduce((s, x) => s + x.trucks, 0);
+  return { inTrucks, outTrucks, stock: inTrucks - outTrucks };
 }
