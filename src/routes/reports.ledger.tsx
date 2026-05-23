@@ -111,30 +111,100 @@ function LedgerReportPage() {
     return { acc, rows, totalDebit, totalCredit, openingSigned, closing };
   }, [generated, allTxns]);
 
+  // count txns per account for folder badges
+  const txnCountByAcc = useMemo(() => {
+    const m = new Map<string, number>();
+    allTxns.forEach((t) => {
+      const a = ACCOUNTS.find((x) => x.name.trim() === t.party.trim());
+      if (a) m.set(a.id, (m.get(a.id) ?? 0) + 1);
+    });
+    return m;
+  }, [allTxns]);
+
   return (
     <AppLayout>
       <PageHeader
         icon={BookOpenCheck}
         title="খতিয়ান রিপোর্ট"
-        subtitle="অ্যাকাউন্ট অনুযায়ী লেনদেনের বিস্তারিত হিসাব"
+        subtitle={account ? account.name : "ফোল্ডার থেকে অ্যাকাউন্ট বাছাই করুন"}
         actions={
-          <button
-            onClick={() => window.print()}
-            disabled={!report}
-            className="h-11 inline-flex items-center gap-2 rounded-xl border-2 border-border-strong bg-card px-4 text-sm font-semibold hover:bg-secondary disabled:opacity-50"
-          >
-            <Printer className="h-4 w-4" /> প্রিন্ট
-          </button>
+          account ? (
+            <div className="flex gap-2">
+              <button
+                onClick={backToFolders}
+                className="h-11 inline-flex items-center gap-2 rounded-xl border-2 border-border-strong bg-card px-4 text-sm font-semibold hover:bg-secondary"
+              >
+                <ArrowLeft className="h-4 w-4" /> ফোল্ডার
+              </button>
+              <button
+                onClick={() => window.print()}
+                disabled={!report}
+                className="h-11 inline-flex items-center gap-2 rounded-xl border-2 border-border-strong bg-card px-4 text-sm font-semibold hover:bg-secondary disabled:opacity-50"
+              >
+                <Printer className="h-4 w-4" /> প্রিন্ট
+              </button>
+            </div>
+          ) : null
         }
       />
 
-      {/* Filter card */}
+      {/* Folder view */}
+      {!account && (
+        <div className="space-y-6">
+          {folders.map(([type, accs]) => {
+            const meta = TYPE_META[type] ?? { icon: Folder, tone: "text-foreground", bg: "bg-secondary" };
+            const Icon = meta.icon;
+            return (
+              <section key={type}>
+                <div className="mb-3 flex items-center gap-2">
+                  <Icon className={`h-5 w-5 ${meta.tone}`} />
+                  <h3 className="text-base font-bold">{type}</h3>
+                  <span className="text-xs text-muted-foreground">({accs.length})</span>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                  {accs.map((a) => {
+                    const count = txnCountByAcc.get(a.id) ?? 0;
+                    return (
+                      <button
+                        key={a.id}
+                        onClick={() => openLedger(a.id)}
+                        className="group relative text-left rounded-2xl border-2 border-border-strong bg-card p-4 shadow-card hover:border-primary hover:shadow-lg transition-all"
+                      >
+                        <div className={`mb-3 inline-flex h-12 w-12 items-center justify-center rounded-xl ${meta.bg}`}>
+                          <Folder className={`h-6 w-6 ${meta.tone} group-hover:hidden`} />
+                          <FolderOpen className={`h-6 w-6 ${meta.tone} hidden group-hover:block`} />
+                        </div>
+                        <p className="font-bold leading-tight line-clamp-2">{a.name}</p>
+                        <p className="mt-1 text-[11px] text-muted-foreground">{a.type}</p>
+                        <div className="mt-3 flex items-end justify-between">
+                          <div>
+                            <p className="text-[10px] text-muted-foreground">প্রারম্ভিক</p>
+                            <p className={`text-sm font-bold ${a.balType === "Receive" ? "text-success" : "text-destructive"}`}>
+                              ৳ {bn(a.opening)}
+                            </p>
+                          </div>
+                          <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-bold text-muted-foreground">
+                            {bn(count)} এন্ট্রি
+                          </span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </section>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Filter card (only when folder open) */}
+      {account && (
       <section className="no-print rounded-2xl border-2 border-border-strong bg-card p-5 shadow-card">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
           <div className="md:col-span-5">
             <label className="mb-1.5 block text-sm font-semibold">অ্যাকাউন্ট</label>
             <select
-              value={accountId}
+              value={accountId ?? ""}
               onChange={(e) => setAccountId(e.target.value)}
               className="h-12 w-full rounded-xl border-2 border-border bg-background px-3 text-sm font-medium focus:border-border-strong focus:outline-none focus:ring-2 focus:ring-ring/30"
             >
@@ -165,7 +235,7 @@ function LedgerReportPage() {
           </div>
           <div className="md:col-span-1 flex items-end">
             <button
-              onClick={() => setGenerated({ accountId, from: fromDate, to: toDate })}
+              onClick={() => accountId && setGenerated({ accountId, from: fromDate, to: toDate })}
               className="h-12 w-full rounded-xl border-2 border-success bg-primary text-sm font-bold text-primary-foreground shadow-card inline-flex items-center justify-center gap-1.5"
             >
               <Search className="h-4 w-4" />
@@ -191,6 +261,7 @@ function LedgerReportPage() {
           ))}
         </div>
       </section>
+      )}
 
       {/* Report */}
       {report && (
@@ -303,6 +374,7 @@ function LedgerReportPage() {
     </AppLayout>
   );
 }
+
 
 function Stat({
   label,
