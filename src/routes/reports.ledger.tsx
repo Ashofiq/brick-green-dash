@@ -38,18 +38,48 @@ function todayISO(offset = 0) {
   return d.toISOString().slice(0, 10);
 }
 
+const TYPE_META: Record<string, { icon: typeof Users; tone: string; bg: string }> = {
+  "কাস্টমার": { icon: Users, tone: "text-blue-600", bg: "bg-blue-50" },
+  "সাপ্লায়ার": { icon: Truck, tone: "text-orange-600", bg: "bg-orange-50" },
+  "কর্মচারী": { icon: UserCog, tone: "text-purple-600", bg: "bg-purple-50" },
+  "ব্যাংক": { icon: Landmark, tone: "text-emerald-600", bg: "bg-emerald-50" },
+  "ক্যাশ": { icon: Wallet, tone: "text-amber-600", bg: "bg-amber-50" },
+  "মালিক": { icon: Crown, tone: "text-rose-600", bg: "bg-rose-50" },
+};
+
 function LedgerReportPage() {
   const { list: allTxns } = useTxns();
-  const [accountId, setAccountId] = useState<string>("1");
+  const [accountId, setAccountId] = useState<string | null>(null);
   const [fromDate, setFromDate] = useState<string>(todayISO(-30));
   const [toDate, setToDate] = useState<string>(todayISO(0));
   const [generated, setGenerated] = useState<{
     accountId: string;
     from: string;
     to: string;
-  } | null>({ accountId: "1", from: todayISO(-30), to: todayISO(0) });
+  } | null>(null);
 
   const account = ACCOUNTS.find((a) => a.id === accountId);
+
+  // group accounts by type for folder view
+  const folders = useMemo(() => {
+    const map = new Map<string, Account[]>();
+    ACCOUNTS.forEach((a) => {
+      if (!map.has(a.type)) map.set(a.type, []);
+      map.get(a.type)!.push(a);
+    });
+    return Array.from(map.entries());
+  }, []);
+
+  const openLedger = (id: string) => {
+    setAccountId(id);
+    setGenerated({ accountId: id, from: fromDate, to: toDate });
+  };
+
+  const backToFolders = () => {
+    setAccountId(null);
+    setGenerated(null);
+  };
+
 
   const report = useMemo(() => {
     if (!generated) return null;
